@@ -43,7 +43,8 @@
                (:module "integrations"
                 :components
                 ((:file "github")
-                 (:file "review"))
+                 (:file "review")
+                 (:file "merge"))
                 :depends-on ("core" "src"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
