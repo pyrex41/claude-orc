@@ -38,7 +38,8 @@
                  (:file "aci-tools")
                  (:file "status-protocol")
                  (:file "orchestrator-intelligence")
-                 (:file "conflict-detection"))
+                 (:file "conflict-detection")
+                 (:file "reliability"))
                 :depends-on ("core"))
                (:module "integrations"
                 :components
