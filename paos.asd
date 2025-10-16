@@ -42,7 +42,8 @@
                 :depends-on ("core"))
                (:module "integrations"
                 :components
-                ((:file "github"))
+                ((:file "github")
+                 (:file "review"))
                 :depends-on ("core" "src"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
