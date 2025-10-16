@@ -39,7 +39,8 @@
                  (:file "status-protocol")
                  (:file "orchestrator-intelligence")
                  (:file "conflict-detection")
-                 (:file "reliability"))
+                 (:file "reliability")
+                 (:file "security"))
                 :depends-on ("core"))
                (:module "integrations"
                 :components
