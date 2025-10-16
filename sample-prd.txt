@@ -1,0 +1,21 @@
+# Sample PRD for PAOS Testing
+
+## Overview
+This is a sample Product Requirements Document to test the PAOS task decomposition engine.
+
+## Goals
+- Test the Taskmaster CLI integration
+- Verify YAML output parsing
+- Ensure error handling works properly
+
+## Requirements
+1. The system should accept PRD files in various formats
+2. Task decomposition should work with the Taskmaster CLI
+3. Output should be properly parsed and validated
+4. Error conditions should be handled gracefully
+
+## Implementation Notes
+- Use external process calls to run task-master
+- Parse YAML output using cl-yaml
+- Handle various error conditions
+- Provide fallback mechanisms

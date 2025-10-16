@@ -1,26 +1,41 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-dev-debug.log
+# Common Lisp
+*.fasl
+*.fas
+*.lib
+*.o
+*.so
+*.dylib
+*.dll
+*.exe
+*.stackdump
+*.core
 
-# Dependency directories
-node_modules/
+# ASDF
+*.asd~
+
+# Quicklisp
+quicklisp.lisp
+
+# PAOS specific
+.paos/
+worktrees/
+*.log
+*.pid
 
 # Environment variables
 .env
-.taskmaster/config.json
+.env.local
 
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Editor files
+.vscode/
+.idea/
+*.swp
+*~
 
-# OS specific
+# OS files
 .DS_Store
+Thumbs.db
+
+# Task Master (keep config, ignore generated files)
+/.taskmaster/tasks/*.txt
+!/taskmaster/config.json

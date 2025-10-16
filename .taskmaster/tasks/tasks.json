@@ -9,7 +9,7 @@
         "testStrategy": "Verify ASDF loads the system without errors; run (ql:quickload :paos) and check for missing dependencies.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -17,7 +17,7 @@
             "description": "Ensure that SBCL (Steel Bank Common Lisp) and Quicklisp are installed and properly configured on the system to support the Common Lisp project development.",
             "dependencies": [],
             "details": "Download and install SBCL from the official website or package manager. Install Quicklisp by downloading the setup script and running it in SBCL. Verify installation by checking versions and ensuring Quicklisp can load packages.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run SBCL and execute (ql:quickload :alexandria) to confirm Quicklisp is working; check for any installation errors."
           },
           {
@@ -28,7 +28,7 @@
               1
             ],
             "details": "Create directories such as 'core/', 'src/', and '.paos/'. Initialize basic files like README.md and .gitignore. Set up the package definition in core/package.lisp with necessary package declarations.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify directory structure exists and files are created; attempt to load the package in SBCL without errors."
           },
           {
@@ -40,7 +40,7 @@
               2
             ],
             "details": "Write paos.asd using defsystem with dependencies including cl-json, dexador, bordeaux-threads, uiop, cl-yaml, cl-ppcre, local-time, alexandria, and str. Define components pointing to the source files. Ensure the system can be loaded via ASDF.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run (asdf:load-system :paos) in SBCL and check that all dependencies are resolved without errors; verify Quicklisp installs missing deps."
           }
         ]
@@ -55,7 +55,7 @@
         "dependencies": [
           1
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -63,7 +63,7 @@
             "description": "Create functionality in core/config.lisp to load and parse .paos/config.yaml using cl-yaml, and validate required fields to ensure the configuration is correct.",
             "dependencies": [],
             "details": "Use cl-yaml to parse the YAML file, handle file I/O errors, and implement validation logic for required fields like API keys and settings. Include error handling for malformed YAML or missing files.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with valid YAML files, invalid YAML, missing files, and configurations with missing required fields to ensure proper loading and validation."
           },
           {
@@ -74,7 +74,7 @@
               1
             ],
             "details": "Modify the load-config function to check and incorporate environment variables, overriding or supplementing YAML values where appropriate, while ensuring API keys are not logged or exposed in error messages.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with set and unset environment variables, verify secure handling by checking that keys are not leaked in logs or outputs, and ensure proper fallback to YAML values."
           }
         ]
@@ -90,7 +90,7 @@
           1,
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -98,7 +98,7 @@
             "description": "Implement the mechanism to call Taskmaster CLI using uiop:run-program for PRD decomposition.",
             "dependencies": [],
             "details": "In core/decomposer.lisp, define a function that uses uiop:run-program to execute 'task-master parse-prd' with the file path as argument, capturing the output for further processing. Ensure proper handling of command-line arguments and process execution.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with sample PRD files to verify CLI calls execute without errors and return expected output."
           },
           {
@@ -109,7 +109,7 @@
               1
             ],
             "details": "Utilize cl-yaml library to parse the output string from the CLI call into a usable format, such as a list or hash table representing the decomposed tasks. Handle YAML structure validation to ensure it matches the expected schema.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Provide sample YAML outputs and verify parsing produces correct Lisp structures without exceptions."
           },
           {
@@ -121,7 +121,7 @@
               2
             ],
             "details": "Add try-catch blocks or condition handling around the run-program and parse-yaml calls to manage errors like command not found, parsing failures, or malformed input. Log errors and provide fallback behaviors or user notifications.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with invalid PRDs and simulate CLI failures to ensure graceful error handling and appropriate error messages."
           }
         ]
@@ -298,7 +298,7 @@
           1,
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -309,7 +309,7 @@
               2
             ],
             "details": "In core/spawner.lisp, create a function to format worktree paths using tags, such as appending a prefix like 'worktree-' followed by the tag. Ensure paths are valid and avoid conflicts with existing directories. This involves string manipulation and path validation in Common Lisp.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Create test cases with various tags; verify generated paths are unique, valid, and follow the convention without errors."
           },
           {
@@ -321,7 +321,7 @@
               2
             ],
             "details": "Extend core/spawner.lisp with the create-worktree function as per the pseudo-code: (defun create-worktree (tag) (run-program \"git worktree add\" (format-path tag))). Handle process execution, error checking, and initial environment initialization like setting up necessary files or variables in the new worktree directory.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use test repositories to run the function; check that worktrees are created successfully, directories exist, and basic environment is initialized without runtime errors."
           },
           {
@@ -333,7 +333,7 @@
               2
             ],
             "details": "In core/spawner.lisp, add functions to manage branches, such as creating feature branches or switching to specific branches after worktree creation. Integrate with git commands like git checkout or git branch, ensuring branches are properly set and tracked. Include error handling for branch conflicts or invalid operations.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Set up test repositories with multiple branches; verify that branches are created, switched correctly, and worktrees point to the right branches without merge issues."
           }
         ]
@@ -1204,8 +1204,39 @@
     ],
     "metadata": {
       "created": "2025-10-16T18:35:16.325Z",
-      "updated": "2025-10-16T18:35:16.325Z",
+      "updated": "2025-10-16T20:47:14.280Z",
       "description": "Tasks for master context"
+    }
+  },
+  "test": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Integrate Taskmaster CLI for Task Decomposition",
+        "description": "Implement functionality to accept PRD files in various formats and use external process calls to run the Taskmaster CLI for task decomposition.",
+        "details": "Use Node.js or Python to handle file input in formats like Markdown or plain text. Execute the Taskmaster CLI as an external process using child_process in Node.js or subprocess in Python. Ensure the CLI is called with appropriate arguments for decomposition. Include error handling for process failures, such as timeouts or invalid inputs. Provide fallback mechanisms like default decomposition if CLI fails. Pseudo-code: const { spawn } = require('child_process'); const taskmaster = spawn('taskmaster', ['decompose', prdFile]); taskmaster.on('error', handleError); taskmaster.stdout.on('data', parseOutput);",
+        "testStrategy": "Unit tests for file format acceptance using mock PRD files. Integration tests to verify CLI execution and output capture. Error simulation tests for CLI failures, ensuring graceful degradation.",
+        "priority": "medium",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Parse YAML Output and Handle Errors",
+        "description": "Parse the YAML output from Taskmaster CLI using cl-yaml library and implement robust error handling for various conditions.",
+        "details": "After CLI execution, use cl-yaml (a Common Lisp YAML parser) to parse the output into structured data. Handle parsing errors, invalid YAML, or missing fields by logging errors and providing fallbacks, such as returning a default task structure. Ensure the parsed data conforms to expected schema. Pseudo-code: (ql:quickload :cl-yaml) (let ((parsed (cl-yaml:parse yaml-string))) (if parsed (process-tasks parsed) (fallback-handler))). Use up-to-date cl-yaml version for compatibility.",
+        "testStrategy": "Unit tests for YAML parsing with valid and invalid inputs. Integration tests combining CLI call and parsing. Edge case tests for error conditions like malformed YAML, ensuring fallbacks trigger correctly.",
+        "priority": "medium",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-10-16T20:38:09.464Z",
+      "updated": "2025-10-16T20:38:09.464Z",
+      "description": "Tasks for test context"
     }
   }
 }
