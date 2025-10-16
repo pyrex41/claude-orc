@@ -37,7 +37,8 @@
                  (:file "repl")
                  (:file "aci-tools")
                  (:file "status-protocol")
-                 (:file "orchestrator-intelligence"))
+                 (:file "orchestrator-intelligence")
+                 (:file "conflict-detection"))
                 :depends-on ("core"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
