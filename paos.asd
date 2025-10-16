@@ -40,7 +40,8 @@
                  (:file "orchestrator-intelligence")
                  (:file "conflict-detection")
                  (:file "reliability")
-                 (:file "security"))
+                 (:file "security")
+                 (:file "main-interface"))
                 :depends-on ("core"))
                (:module "integrations"
                 :components
