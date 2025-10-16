@@ -43,7 +43,9 @@
                  (:file "security")
                  (:file "main-interface")
                  (:file "agent-communication")
-                 (:file "checkpoints"))
+                 (:file "checkpoints")
+                 (:file "performance")
+                 (:file "usability"))
                 :depends-on ("core"))
                (:module "integrations"
                 :components
