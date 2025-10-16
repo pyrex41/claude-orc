@@ -1,0 +1,1211 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Project Setup and Dependencies",
+        "description": "Initialize the Common Lisp project structure, set up ASDF system definition, and install required Quicklisp dependencies.",
+        "details": "Create paos.asd with dependencies like cl-json, dexador, bordeaux-threads, uiop, cl-yaml, cl-ppcre, local-time, alexandria, str. Set up package definitions in core/package.lisp. Ensure SBCL and Quicklisp are installed. Pseudo-code: (defsystem \"paos\" :depends-on (\"cl-json\" \"dexador\" ...) :components (...)).",
+        "testStrategy": "Verify ASDF loads the system without errors; run (ql:quickload :paos) and check for missing dependencies.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Install and Configure SBCL and Quicklisp",
+            "description": "Ensure that SBCL (Steel Bank Common Lisp) and Quicklisp are installed and properly configured on the system to support the Common Lisp project development.",
+            "dependencies": [],
+            "details": "Download and install SBCL from the official website or package manager. Install Quicklisp by downloading the setup script and running it in SBCL. Verify installation by checking versions and ensuring Quicklisp can load packages.",
+            "status": "pending",
+            "testStrategy": "Run SBCL and execute (ql:quickload :alexandria) to confirm Quicklisp is working; check for any installation errors."
+          },
+          {
+            "id": 2,
+            "title": "Initialize Common Lisp Project Structure",
+            "description": "Set up the basic directory structure and initial files for the Common Lisp project named 'paos'.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create directories such as 'core/', 'src/', and '.paos/'. Initialize basic files like README.md and .gitignore. Set up the package definition in core/package.lisp with necessary package declarations.",
+            "status": "pending",
+            "testStrategy": "Verify directory structure exists and files are created; attempt to load the package in SBCL without errors."
+          },
+          {
+            "id": 3,
+            "title": "Set Up ASDF System Definition with Dependencies",
+            "description": "Create the ASDF system definition file (paos.asd) and specify all required dependencies for the project.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Write paos.asd using defsystem with dependencies including cl-json, dexador, bordeaux-threads, uiop, cl-yaml, cl-ppcre, local-time, alexandria, and str. Define components pointing to the source files. Ensure the system can be loaded via ASDF.",
+            "status": "pending",
+            "testStrategy": "Run (asdf:load-system :paos) in SBCL and check that all dependencies are resolved without errors; verify Quicklisp installs missing deps."
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Configuration Management",
+        "description": "Implement loading and validation of configuration files, including API keys and settings.",
+        "details": "Create core/config.lisp to load .paos/config.yaml using cl-yaml. Handle environment variables like ANTHROPIC_API_KEY. Validate required fields. Pseudo-code: (defun load-config () (let ((config (yaml:parse (read-file \".paos/config.yaml\"))) ...) (validate-config config))).",
+        "testStrategy": "Test with valid and invalid config files; ensure API key is loaded securely and errors are thrown for missing keys.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement YAML Configuration File Loading and Validation",
+            "description": "Create functionality in core/config.lisp to load and parse .paos/config.yaml using cl-yaml, and validate required fields to ensure the configuration is correct.",
+            "dependencies": [],
+            "details": "Use cl-yaml to parse the YAML file, handle file I/O errors, and implement validation logic for required fields like API keys and settings. Include error handling for malformed YAML or missing files.",
+            "status": "pending",
+            "testStrategy": "Test with valid YAML files, invalid YAML, missing files, and configurations with missing required fields to ensure proper loading and validation."
+          },
+          {
+            "id": 2,
+            "title": "Secure Handling of Environment Variables",
+            "description": "Implement secure loading and integration of environment variables such as ANTHROPIC_API_KEY into the configuration system.",
+            "dependencies": [
+              1
+            ],
+            "details": "Modify the load-config function to check and incorporate environment variables, overriding or supplementing YAML values where appropriate, while ensuring API keys are not logged or exposed in error messages.",
+            "status": "pending",
+            "testStrategy": "Test with set and unset environment variables, verify secure handling by checking that keys are not leaked in logs or outputs, and ensure proper fallback to YAML values."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Task Decomposition Engine",
+        "description": "Build the core engine for breaking down PRDs into tasks using Taskmaster CLI.",
+        "details": "Implement core/decomposer.lisp to call Taskmaster CLI via uiop:run-program. Parse output with cl-yaml. Pseudo-code: (defun decompose-prd (file) (let ((output (run-program \"task-master parse-prd\" file))) (parse-yaml output))).",
+        "testStrategy": "Provide sample PRD files; verify task breakdown matches expected structure and handles errors gracefully.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Integrate Taskmaster CLI via External Process Calls",
+            "description": "Implement the mechanism to call Taskmaster CLI using uiop:run-program for PRD decomposition.",
+            "dependencies": [],
+            "details": "In core/decomposer.lisp, define a function that uses uiop:run-program to execute 'task-master parse-prd' with the file path as argument, capturing the output for further processing. Ensure proper handling of command-line arguments and process execution.",
+            "status": "pending",
+            "testStrategy": "Test with sample PRD files to verify CLI calls execute without errors and return expected output."
+          },
+          {
+            "id": 2,
+            "title": "Parse YAML Output from Taskmaster CLI",
+            "description": "Parse the YAML-formatted output from Taskmaster CLI into Lisp data structures.",
+            "dependencies": [
+              1
+            ],
+            "details": "Utilize cl-yaml library to parse the output string from the CLI call into a usable format, such as a list or hash table representing the decomposed tasks. Handle YAML structure validation to ensure it matches the expected schema.",
+            "status": "pending",
+            "testStrategy": "Provide sample YAML outputs and verify parsing produces correct Lisp structures without exceptions."
+          },
+          {
+            "id": 3,
+            "title": "Handle Errors in Decomposition Process",
+            "description": "Implement error handling for failures in CLI execution, parsing, or invalid PRDs.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Add try-catch blocks or condition handling around the run-program and parse-yaml calls to manage errors like command not found, parsing failures, or malformed input. Log errors and provide fallback behaviors or user notifications.",
+            "status": "pending",
+            "testStrategy": "Test with invalid PRDs and simulate CLI failures to ensure graceful error handling and appropriate error messages."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "PRD Parsing",
+        "description": "Enhance PRD parsing to extract structured task information from various formats.",
+        "details": "Extend decomposer to handle Markdown, plain text, or YAML PRDs. Use Claude API for initial analysis if needed. Pseudo-code: (defun parse-prd (content) (claude-api-call \"Analyze PRD\" content)).",
+        "testStrategy": "Test with different PRD formats; ensure parsing extracts tasks, descriptions, and dependencies accurately.",
+        "priority": "medium",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Markdown PRD Parser",
+            "description": "Develop a parser module to handle Markdown-formatted PRDs, extracting key elements like tasks, descriptions, and dependencies.",
+            "dependencies": [],
+            "details": "Create a function that uses regex or a Markdown parser library to identify sections, lists, and metadata in Markdown PRDs, converting them into structured data objects.",
+            "status": "pending",
+            "testStrategy": "Test with sample Markdown PRDs; verify extraction of tasks, descriptions, and dependencies matches expected structured output."
+          },
+          {
+            "id": 2,
+            "title": "Implement Plain Text PRD Parser",
+            "description": "Build a parser for plain text PRDs to identify and extract task-related information without formatting cues.",
+            "dependencies": [],
+            "details": "Implement logic to scan plain text content for patterns like task titles, descriptions, and dependency indicators using string matching or NLP techniques, outputting structured data.",
+            "status": "pending",
+            "testStrategy": "Use various plain text PRD examples; ensure accurate parsing of tasks and dependencies, handling edge cases like missing sections."
+          },
+          {
+            "id": 3,
+            "title": "Implement YAML PRD Parser",
+            "description": "Create a parser specifically for YAML-formatted PRDs to directly deserialize into structured task information.",
+            "dependencies": [],
+            "details": "Utilize a YAML parsing library to load and validate YAML PRDs, mapping fields to task structures including IDs, titles, descriptions, and dependencies.",
+            "status": "pending",
+            "testStrategy": "Validate with YAML PRD samples; confirm structured extraction and error handling for invalid YAML formats."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Claude API for PRD Analysis",
+            "description": "Incorporate Claude API calls to analyze PRDs when parsing is ambiguous or to enhance extraction of structured information.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Extend the decomposer to call Claude API with prompts like 'Analyze PRD' for content analysis, using results to refine or supplement parsed data into task structures.",
+            "status": "pending",
+            "testStrategy": "Mock API responses; test integration with parsers to ensure accurate task extraction and handle API failures gracefully."
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Intelligent Tagging",
+        "description": "Assign domain-specific tags to tasks for parallel execution grouping.",
+        "details": "Use Claude API to tag tasks (e.g., 'ui', 'backend'). Implement logic to identify parallel-safe groups. Pseudo-code: (defun assign-tags (tasks) (claude-api-call \"Tag tasks\" (format-tasks tasks))).",
+        "testStrategy": "Provide sample tasks; verify tags are assigned correctly and parallel groups are identified without conflicts.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Integrate Claude API for Task Tagging",
+            "description": "Set up and implement the integration with the Claude API to assign domain-specific tags (e.g., 'ui', 'backend') to tasks based on their descriptions and details.",
+            "dependencies": [],
+            "details": "Create a function to format tasks into a suitable input for the Claude API, make the API call using the provided pseudo-code as a base, and parse the response to extract tags. Ensure error handling for API failures and rate limits. Use libraries like dexador for HTTP requests if needed.",
+            "status": "pending",
+            "testStrategy": "Mock API responses with sample tasks and verify that correct tags are assigned without errors."
+          },
+          {
+            "id": 2,
+            "title": "Implement Parallel Execution Grouping Logic",
+            "description": "Develop logic to analyze tagged tasks and group them into parallel-safe execution groups, ensuring no conflicts within groups.",
+            "dependencies": [
+              1
+            ],
+            "details": "After tagging, implement a function to identify dependencies and conflicts among tasks. Use the tags to categorize tasks and create groups where tasks can run in parallel. Pseudo-code: (defun group-tasks (tagged-tasks) (analyze-dependencies tagged-tasks) (create-groups tagged-tasks)). Handle edge cases like circular dependencies.",
+            "status": "pending",
+            "testStrategy": "Provide a set of tagged tasks with known dependencies; verify that groups are formed correctly and no conflicting tasks are in the same group."
+          },
+          {
+            "id": 3,
+            "title": "Validate Tag Assignments and Groups",
+            "description": "Create validation mechanisms to ensure tags are accurately assigned and parallel groups are conflict-free.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Implement checks to validate tag relevance to task content, and verify that grouped tasks do not have overlapping dependencies or conflicts. Include logging for discrepancies and potential re-tagging. Pseudo-code: (defun validate-tags (tasks groups) (check-tag-accuracy tasks) (verify-group-safety groups)).",
+            "status": "pending",
+            "testStrategy": "Use sample tasks and groups; run validations and confirm that alerts are raised for inaccuracies or conflicts, and that correct assignments pass."
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Subtask Expansion",
+        "description": "Decompose high-level tasks into atomic, executable subtasks.",
+        "details": "For each task, use Claude to generate 3-8 subtasks. Support 2-3 levels of hierarchy. Pseudo-code: (defun expand-subtasks (task) (claude-api-call \"Expand task\" task)).",
+        "testStrategy": "Test expansion on high-level tasks; ensure subtasks are atomic and cover the full scope.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Integrate Claude API for Subtask Generation",
+            "description": "Set up the necessary code to call the Claude API for generating subtasks from high-level tasks.",
+            "dependencies": [],
+            "details": "Implement a function in core/subtask-expander.lisp that uses dexador to make API calls to Claude, passing the task description and prompting for 3-8 subtasks. Handle API key from config and parse JSON responses.",
+            "status": "pending",
+            "testStrategy": "Mock API responses and verify correct subtasks are generated from sample tasks."
+          },
+          {
+            "id": 2,
+            "title": "Implement Hierarchical Decomposition Logic",
+            "description": "Develop logic to support 2-3 levels of subtask hierarchy during expansion.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create recursive functions to expand subtasks into further subtasks if needed, ensuring up to 3 levels. Use a data structure to track hierarchy and prevent infinite recursion. Integrate with the Claude API call for deeper levels.",
+            "status": "pending",
+            "testStrategy": "Test with nested task examples, ensuring hierarchy is maintained and levels do not exceed 3."
+          },
+          {
+            "id": 3,
+            "title": "Ensure Atomic Subtask Coverage",
+            "description": "Validate that generated subtasks are atomic and fully cover the original task scope.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Add validation logic to check each subtask for atomicity (single responsibility) and completeness (covers all aspects of parent task). Use Claude for refinement if subtasks are not atomic or missing coverage.",
+            "status": "pending",
+            "testStrategy": "Provide high-level tasks and verify subtasks are executable units that collectively address the full task without gaps."
+          },
+          {
+            "id": 4,
+            "title": "Handle Errors and Edge Cases in Expansion",
+            "description": "Implement error handling for API failures, invalid responses, and edge cases in subtask generation.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Add try-catch blocks around API calls, fallback mechanisms for failed expansions, and checks for malformed subtasks. Ensure the system retries or logs errors gracefully, maintaining system stability.",
+            "status": "pending",
+            "testStrategy": "Simulate API errors and invalid inputs; confirm the system handles them without crashing and produces valid subtasks."
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Git Worktree Management",
+        "description": "Create and manage isolated Git worktrees for each agent group.",
+        "details": "Implement core/spawner.lisp for git worktree add commands. Handle naming conventions and environment initialization. Pseudo-code: (defun create-worktree (tag) (run-program \"git worktree add\" (format-path tag))).",
+        "testStrategy": "Create test repositories; verify worktrees are created, branches are set, and environments are initialized correctly.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Git Worktree Naming Conventions",
+            "description": "Define and implement a consistent naming convention for Git worktrees based on agent group tags, ensuring unique and descriptive paths.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "In core/spawner.lisp, create a function to format worktree paths using tags, such as appending a prefix like 'worktree-' followed by the tag. Ensure paths are valid and avoid conflicts with existing directories. This involves string manipulation and path validation in Common Lisp.",
+            "status": "pending",
+            "testStrategy": "Create test cases with various tags; verify generated paths are unique, valid, and follow the convention without errors."
+          },
+          {
+            "id": 2,
+            "title": "Create and Initialize Git Worktrees",
+            "description": "Implement the core functionality to add new Git worktrees using the git worktree add command, including environment setup for each agent group.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Extend core/spawner.lisp with the create-worktree function as per the pseudo-code: (defun create-worktree (tag) (run-program \"git worktree add\" (format-path tag))). Handle process execution, error checking, and initial environment initialization like setting up necessary files or variables in the new worktree directory.",
+            "status": "pending",
+            "testStrategy": "Use test repositories to run the function; check that worktrees are created successfully, directories exist, and basic environment is initialized without runtime errors."
+          },
+          {
+            "id": 3,
+            "title": "Manage Worktree Branches",
+            "description": "Handle branch creation, switching, and management within the isolated worktrees for each agent group.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "In core/spawner.lisp, add functions to manage branches, such as creating feature branches or switching to specific branches after worktree creation. Integrate with git commands like git checkout or git branch, ensuring branches are properly set and tracked. Include error handling for branch conflicts or invalid operations.",
+            "status": "pending",
+            "testStrategy": "Set up test repositories with multiple branches; verify that branches are created, switched correctly, and worktrees point to the right branches without merge issues."
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Sub-Agent Spawning",
+        "description": "Launch Claude Code instances in Zellij tabs for each agent group.",
+        "details": "Integrate with Zellij to create tabs and spawn Claude Code with context files. Pseudo-code: (defun spawn-agent (tag) (zellij:new-tab tag) (run-program \"claude\" \"--context\" context-file)).",
+        "testStrategy": "Test in a Zellij session; verify tabs are created and agents start with correct context.",
+        "priority": "high",
+        "dependencies": [
+          7
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Integrate Zellij API for Tab Creation",
+            "description": "Set up integration with Zellij to programmatically create new tabs for each agent group.",
+            "dependencies": [],
+            "details": "Use Zellij's command-line interface or API to create tabs. Implement a function to spawn a new tab with a given tag, ensuring it handles session management and tab naming correctly.",
+            "status": "pending",
+            "testStrategy": "Test in a Zellij session by creating tabs manually and verifying they appear with correct names."
+          },
+          {
+            "id": 2,
+            "title": "Implement Claude Code Spawning with Context",
+            "description": "Develop functionality to launch Claude Code instances in the created Zellij tabs, passing appropriate context files.",
+            "dependencies": [
+              1
+            ],
+            "details": "Modify the spawn-agent function to run the 'claude' command with the '--context' flag pointing to the relevant context file. Ensure the command is executed within the newly created tab.",
+            "status": "pending",
+            "testStrategy": "Spawn instances in a test Zellij session and check that Claude Code starts with the correct context loaded."
+          },
+          {
+            "id": 3,
+            "title": "Handle Initialization Errors",
+            "description": "Add error handling for cases where tab creation or Claude Code spawning fails.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Implement try-catch or error-checking mechanisms around the zellij:new-tab and run-program calls. Log errors and provide fallback options, such as retrying or notifying the user.",
+            "status": "pending",
+            "testStrategy": "Simulate failure scenarios, like invalid context files or Zellij not running, and verify that errors are caught and handled gracefully."
+          },
+          {
+            "id": 4,
+            "title": "Test Full Sub-Agent Spawning Workflow",
+            "description": "Conduct end-to-end testing of the spawning process for multiple agent groups.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Create a test script that spawns multiple agents in sequence, checks for successful tab creation, context loading, and error-free initialization. Validate in a controlled Zellij environment.",
+            "status": "pending",
+            "testStrategy": "Run the full workflow in a Zellij session with mock agent groups and verify all subtasks complete without issues."
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Agent-Computer Interface (ACI)",
+        "description": "Define and implement well-designed tool definitions for agents following Anthropic best practices.",
+        "details": "Create agents/tools.lisp with tools like git_commit, file_read. Ensure tools are validated and passed to Claude Code. Pseudo-code: (defvar *tools* '((\"git_commit\" :description \"...\" :parameters ...))).",
+        "testStrategy": "Mock tool calls; verify tools execute correctly and handle errors.",
+        "priority": "medium",
+        "dependencies": [
+          8
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Tool Schemas Following Anthropic Practices",
+            "description": "Research and define JSON schemas for tools like git_commit and file_read, ensuring they align with Anthropic's best practices for tool definitions, including proper parameter types and descriptions.",
+            "dependencies": [],
+            "details": "Create a structured schema in agents/tools.lisp using Lisp data structures that mirror JSON schemas, with fields for name, description, and parameters. Ensure schemas are comprehensive and follow Anthropic guidelines for clarity and safety.",
+            "status": "pending",
+            "testStrategy": "Validate schemas against sample tool calls using mock data to ensure they parse correctly."
+          },
+          {
+            "id": 2,
+            "title": "Implement Tool Validation",
+            "description": "Develop validation logic to check tool definitions for correctness, including parameter validation and error handling.",
+            "dependencies": [
+              1
+            ],
+            "details": "Add functions in agents/tools.lisp to validate each tool schema, such as checking required parameters, data types, and ensuring no invalid entries. Implement error reporting for malformed tools.",
+            "status": "pending",
+            "testStrategy": "Use unit tests with valid and invalid tool definitions to verify validation catches errors and passes correct schemas."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Tools with Claude Code",
+            "description": "Ensure validated tools are properly passed and integrated into Claude Code for agent execution.",
+            "dependencies": [
+              2
+            ],
+            "details": "Modify the code to load and pass the *tools* list to Claude Code, handling serialization if needed. Integrate with the agent interface to allow tool calls during execution.",
+            "status": "pending",
+            "testStrategy": "Mock Claude Code interactions; test full tool execution flow, including error handling and successful tool invocations."
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Real-Time Status Dashboard",
+        "description": "Build a terminal-based UI showing agent progress and status.",
+        "details": "Implement ui/dashboard.lisp with ANSI escape codes for progress bars and updates. Pseudo-code: (defun display-dashboard (statuses) (format t \"~C[2J~C[H\" #\\Escape #\\Escape) (loop for status in statuses do (print-status status))).",
+        "testStrategy": "Simulate agent statuses; verify dashboard renders correctly and refreshes without flicker.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement ANSI Escape Code-Based UI",
+            "description": "Set up the basic terminal UI framework using ANSI escape codes for clearing the screen and positioning the cursor.",
+            "dependencies": [],
+            "details": "In ui/dashboard.lisp, define functions to clear the screen and position the cursor using ANSI escape sequences like ~C[2J for clear screen and ~C[H for home position. Ensure compatibility with common terminals.",
+            "status": "pending",
+            "testStrategy": "Run the UI in a terminal emulator and verify that the screen clears and cursor repositions correctly without errors."
+          },
+          {
+            "id": 2,
+            "title": "Render Progress Bars",
+            "description": "Develop functionality to display progress bars for each agent's status using ANSI codes for visual representation.",
+            "dependencies": [
+              1
+            ],
+            "details": "Extend the dashboard to include progress bar rendering, using characters like █ for filled portions and ░ for empty. Calculate percentages from status data and format accordingly in the print-status function.",
+            "status": "pending",
+            "testStrategy": "Simulate various status percentages and check that progress bars display accurately and proportionally in the terminal."
+          },
+          {
+            "id": 3,
+            "title": "Handle Real-Time Updates Without Flicker",
+            "description": "Implement logic to update the dashboard in real-time while preventing screen flicker during refreshes.",
+            "dependencies": [
+              2
+            ],
+            "details": "Modify the display-dashboard function to refresh only changed parts of the UI, using cursor positioning to overwrite specific lines instead of clearing the entire screen each time. Incorporate timing controls to poll statuses periodically.",
+            "status": "pending",
+            "testStrategy": "Simulate continuous status updates and observe the dashboard for any flicker; measure refresh times to ensure smooth, flicker-free updates."
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Agent Status Protocol",
+        "description": "Implement structured status reporting from agents to orchestrator.",
+        "details": "Agents write JSON to shared files. Orchestrator polls with core/monitor.lisp. Pseudo-code: (defun poll-statuses () (loop for tag in tags collect (parse-json (read-file (format \"/shared/status-~A.json\" tag))))).",
+        "testStrategy": "Mock status files; verify polling reads and parses correctly, handles missing files.",
+        "priority": "medium",
+        "dependencies": [
+          8,
+          9
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Agent Status JSON Writing",
+            "description": "Develop the functionality for agents to write structured JSON status reports to shared files, including handling of status data like progress, errors, and timestamps.",
+            "dependencies": [],
+            "details": "Modify agent code to serialize status information into JSON format and write it to files named /shared/status-{tag}.json. Ensure atomic writes to avoid corruption and include error handling for file operations. Use libraries like cl-json for serialization.",
+            "status": "pending",
+            "testStrategy": "Create mock agent statuses and verify JSON files are written correctly with expected data; test file locking and error scenarios."
+          },
+          {
+            "id": 2,
+            "title": "Implement Orchestrator Status Polling",
+            "description": "Build the polling mechanism in core/monitor.lisp to read and parse JSON status files from agents, collecting statuses for further processing.",
+            "dependencies": [],
+            "details": "Implement the poll-statuses function as per pseudo-code, using a loop to read and parse JSON from /shared/status-{tag}.json files for each agent tag. Add error handling for missing files, invalid JSON, and parsing failures. Integrate with existing orchestrator logic.",
+            "status": "pending",
+            "testStrategy": "Use mock status JSON files; verify polling collects and parses statuses accurately, handles missing or malformed files gracefully, and integrates with monitor logic."
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Orchestrator Intelligence",
+        "description": "Add LLM-based analysis for agent statuses and recommendations.",
+        "details": "Use Claude API in monitor for analysis. Pseudo-code: (defun orchestrator-analyze (statuses) (claude-api-call \"Analyze statuses\" (format-statuses statuses))).",
+        "testStrategy": "Provide mock statuses; verify analysis provides useful insights and suggestions.",
+        "priority": "medium",
+        "dependencies": [
+          11
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Format Agent Statuses for LLM Input",
+            "description": "Develop a function to transform agent statuses into a structured format suitable for input to the Claude API.",
+            "dependencies": [],
+            "details": "Implement the format-statuses function as per the provided pseudo-code. Ensure the output is a clear, readable string or JSON representation of statuses that can be fed into the LLM for analysis.",
+            "status": "pending",
+            "testStrategy": "Test with various sample agent statuses to verify the formatting produces correct and readable input."
+          },
+          {
+            "id": 2,
+            "title": "Integrate Claude API for Status Analysis",
+            "description": "Set up the integration with Claude API to analyze the formatted agent statuses and generate insights.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement the orchestrator-analyze function and claude-api-call as outlined in the pseudo-code. Configure API keys, handle authentication, and ensure proper error handling for API requests.",
+            "status": "pending",
+            "testStrategy": "Use mock formatted statuses to simulate API calls and verify that the analysis returns useful insights without errors."
+          },
+          {
+            "id": 3,
+            "title": "Process LLM Recommendations",
+            "description": "Parse and process the recommendations from the LLM analysis to provide actionable suggestions for the orchestrator.",
+            "dependencies": [
+              2
+            ],
+            "details": "Develop logic to extract and interpret recommendations from the Claude API response. Integrate these into the system to update agent statuses or suggest next steps, ensuring recommendations are practical and relevant.",
+            "status": "pending",
+            "testStrategy": "Provide mock API responses with recommendations and test that they are correctly processed and applied to the system."
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "Conflict Detection",
+        "description": "Proactively identify potential merge conflicts and dependency issues.",
+        "details": "Scan worktrees for overlapping files and dependency conflicts. Pseudo-code: (defun detect-conflicts (worktrees) (find-overlaps (mapcar #'modified-files worktrees))).",
+        "testStrategy": "Create conflicting worktrees; verify conflicts are detected and alerts are generated.",
+        "priority": "medium",
+        "dependencies": [
+          7,
+          11
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Scan Worktrees for File Overlaps",
+            "description": "Implement functionality to scan multiple worktrees and identify overlapping modified files that could lead to merge conflicts.",
+            "dependencies": [],
+            "details": "Use the provided pseudo-code as a base: (defun detect-conflicts (worktrees) (find-overlaps (mapcar #'modified-files worktrees))). Develop a function to collect modified files from each worktree and detect overlaps by comparing file paths and changes.",
+            "status": "pending",
+            "testStrategy": "Create test worktrees with overlapping file modifications and verify that overlaps are correctly identified."
+          },
+          {
+            "id": 2,
+            "title": "Detect Dependency Conflicts",
+            "description": "Analyze dependencies between tasks or components in the worktrees to identify potential conflicts beyond file overlaps.",
+            "dependencies": [
+              1
+            ],
+            "details": "Extend the conflict detection to include dependency analysis. Check for circular dependencies or incompatible changes in dependent components. Integrate with the overlap detection to flag conflicts where dependencies are affected.",
+            "status": "pending",
+            "testStrategy": "Set up scenarios with dependency chains and conflicting changes; ensure the system detects and reports these conflicts accurately."
+          },
+          {
+            "id": 3,
+            "title": "Generate Conflict Alerts",
+            "description": "Create a mechanism to generate and display alerts when conflicts are detected, notifying users of potential issues.",
+            "dependencies": [
+              2
+            ],
+            "details": "Implement alert generation logic that takes detected conflicts and produces user-friendly notifications. This could include logging, UI prompts, or email alerts. Ensure alerts include details on the conflicts and suggested resolutions.",
+            "status": "pending",
+            "testStrategy": "Simulate conflict detection scenarios and verify that appropriate alerts are generated and presented to the user without false positives."
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Human-in-the-Loop Interaction",
+        "description": "Enable developer interaction with agents and orchestrator.",
+        "details": "Implement REPL commands in core/orchestrator.lisp. Pseudo-code: (defun repl-loop () (loop (case (read) ('status (print-status)) ...))).",
+        "testStrategy": "Test REPL commands manually; verify switching tabs and sending feedback works.",
+        "priority": "high",
+        "dependencies": [
+          8,
+          10
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Basic REPL Loop Structure",
+            "description": "Set up the foundational REPL loop in core/orchestrator.lisp to read user inputs and process commands in a continuous loop.",
+            "dependencies": [],
+            "details": "Create a function like repl-loop that uses a loop to read inputs and dispatch to handlers. Ensure it handles basic input/output without crashing on invalid inputs. Integrate with existing orchestrator code.",
+            "status": "pending",
+            "testStrategy": "Manually test the loop by running it and entering basic commands to verify it reads and responds without errors."
+          },
+          {
+            "id": 2,
+            "title": "Add Core REPL Commands",
+            "description": "Implement essential REPL commands such as 'status' to print current agent and orchestrator status, following the provided pseudo-code.",
+            "dependencies": [
+              1
+            ],
+            "details": "Extend the REPL loop with a case statement to handle commands like 'status' by calling print-status. Add more commands as needed for basic interaction, ensuring they are defined and callable within the loop.",
+            "status": "pending",
+            "testStrategy": "Test each command manually by invoking them in the REPL and verifying outputs match expected status information."
+          },
+          {
+            "id": 3,
+            "title": "Handle User Input Parsing and Validation",
+            "description": "Develop robust parsing for user inputs in the REPL, including validation to prevent errors and provide feedback on invalid commands.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement input parsing logic to tokenize and validate commands, handle edge cases like empty inputs or typos, and display helpful error messages. Integrate this into the repl-loop for seamless user experience.",
+            "status": "pending",
+            "testStrategy": "Provide various input scenarios (valid, invalid, edge cases) and verify parsing works correctly, with appropriate error handling."
+          },
+          {
+            "id": 4,
+            "title": "Integrate REPL with Dashboard and Agents",
+            "description": "Connect the REPL to the dashboard for visual feedback and to agents for sending commands or receiving updates, enabling full human-in-the-loop interaction.",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Modify the REPL commands to interact with the dashboard (e.g., switching tabs) and agents (e.g., sending feedback or queries). Ensure data flows correctly between components, using shared protocols or APIs as defined in related tasks.",
+            "status": "pending",
+            "testStrategy": "Manually test integration by using REPL commands to interact with dashboard and agents, verifying that actions like sending feedback update the system appropriately."
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Direct Agent Communication",
+        "description": "Allow developers to chat directly with agents in Zellij tabs.",
+        "details": "Ensure Zellij tab switching works; agents respond to commands like 'pause'. Pseudo-code: (defun focus-agent (tag) (zellij:switch-to-tab tag)).",
+        "testStrategy": "Interact with running agents; verify commands are processed and state is maintained.",
+        "priority": "medium",
+        "dependencies": [
+          8,
+          14
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Zellij Tab Switching",
+            "description": "Develop functionality to enable switching between Zellij tabs for direct communication with agents, allowing developers to focus on specific agent tabs.",
+            "dependencies": [],
+            "details": "Integrate Zellij API or command-line interface to implement tab switching. Use the provided pseudo-code as a basis: (defun focus-agent (tag) (zellij:switch-to-tab tag)). Ensure the function handles tag validation and error cases for non-existent tabs. This builds on the sub-agent spawning in task 8.",
+            "status": "pending",
+            "testStrategy": "Test in a Zellij session by spawning multiple tabs and verifying that switching commands correctly focus on the intended tab without errors."
+          },
+          {
+            "id": 2,
+            "title": "Enable Agent Response to Direct Commands",
+            "description": "Implement the ability for agents to recognize and respond to direct commands like 'pause' sent through the Zellij tab interface.",
+            "dependencies": [
+              1
+            ],
+            "details": "Modify agent logic in the Claude Code instances to parse incoming messages for commands. For 'pause', implement state management to halt agent activities. Ensure commands are processed asynchronously and responses are echoed back in the tab. Integrate with the tab switching to allow command sending after focusing.",
+            "status": "pending",
+            "testStrategy": "Interact with running agents in Zellij tabs by sending commands like 'pause'; verify that the agent state changes appropriately and responses are displayed, maintaining state across interactions."
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Orchestrator Interface",
+        "description": "Build the main terminal interface for dashboard and commands.",
+        "details": "Combine dashboard and REPL in a single interface. Pseudo-code: (defun main-interface () (display-dashboard) (repl-loop)).",
+        "testStrategy": "Run full session; verify interface handles commands and updates dashboard.",
+        "priority": "medium",
+        "dependencies": [
+          10,
+          14
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Integrate Dashboard Display into REPL Loop",
+            "description": "Modify the REPL loop to incorporate the dashboard display, ensuring it is shown initially and can be refreshed as needed.",
+            "dependencies": [],
+            "details": "Update the main-interface function to call display-dashboard before entering the repl-loop, and add mechanisms to refresh the dashboard on command or periodically.",
+            "status": "pending",
+            "testStrategy": "Run the interface and verify that the dashboard is displayed at startup and updates correctly during REPL interactions."
+          },
+          {
+            "id": 2,
+            "title": "Handle Concurrent Dashboard Updates",
+            "description": "Implement concurrency to allow the dashboard to update in real-time without blocking the REPL input and processing.",
+            "dependencies": [
+              1
+            ],
+            "details": "Use threading or asynchronous programming to run dashboard updates in the background while the REPL loop remains responsive to user inputs.",
+            "status": "pending",
+            "testStrategy": "Simulate concurrent operations and check that dashboard updates occur without interrupting REPL commands or causing delays."
+          },
+          {
+            "id": 3,
+            "title": "Ensure Interface Responsiveness",
+            "description": "Optimize the combined interface for quick response times to commands and smooth dashboard refreshes.",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Profile the code for bottlenecks, optimize rendering and input handling, and ensure low-latency interactions in the terminal environment.",
+            "status": "pending",
+            "testStrategy": "Measure response times for commands and updates, ensuring they stay below acceptable thresholds during full session runs."
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Checkpoint System",
+        "description": "Implement automatic pause points for human review.",
+        "details": "Configure checkpoints in config; agents pause at subtasks or blockers. Pseudo-code: (defun checkpoint-p (config) (getf config :pre-commit)).",
+        "testStrategy": "Configure checkpoints; verify agents pause and resume correctly after approval.",
+        "priority": "medium",
+        "dependencies": [
+          8,
+          14
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Configure Checkpoints in Config",
+            "description": "Set up the configuration file to define checkpoint points where agents should pause for human review.",
+            "dependencies": [],
+            "details": "Modify the config.yaml file to include a :checkpoints section with keys like :pre-commit and :at-blockers. Ensure the config loader in core/config.lisp can parse these settings. Implement validation to check for valid checkpoint types.",
+            "status": "pending",
+            "testStrategy": "Load config files with and without checkpoints; verify checkpoint-p function returns correct boolean values."
+          },
+          {
+            "id": 2,
+            "title": "Implement Pause Logic at Subtasks or Blockers",
+            "description": "Develop the logic that causes agents to pause execution when reaching defined checkpoints, such as subtasks or blockers.",
+            "dependencies": [
+              1
+            ],
+            "details": "In the agent execution loop, add checks using the checkpoint-p function before proceeding to subtasks or when encountering blockers. Use bordeaux-threads to halt execution and signal for human review. Store current state for resumption.",
+            "status": "pending",
+            "testStrategy": "Simulate agent runs with checkpoints enabled; confirm pauses occur at subtasks and blockers without proceeding."
+          },
+          {
+            "id": 3,
+            "title": "Handle Resume After Approval",
+            "description": "Implement the mechanism to resume agent execution after human approval is granted at a checkpoint.",
+            "dependencies": [
+              2
+            ],
+            "details": "Create a resume function that restores the agent's state from storage and continues execution from the paused point. Integrate with the pause logic to wait for approval signals, possibly via a queue or event system. Ensure state integrity during pause-resume cycles.",
+            "status": "pending",
+            "testStrategy": "Test full pause-resume cycles by approving checkpoints; verify agents continue correctly and complete tasks without data loss."
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Pull Request Management",
+        "description": "Automate PR creation with rich context.",
+        "details": "Integrate with GitHub CLI in integrations/github.lisp. Pseudo-code: (defun create-pr (tag) (run-program \"gh pr create\" (format-args tag))).",
+        "testStrategy": "Mock PR creation; verify PRs are created with correct titles, bodies, and labels.",
+        "priority": "medium",
+        "dependencies": [
+          7,
+          8
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Integrate GitHub CLI for PR Creation",
+            "description": "Implement the integration with GitHub CLI in integrations/github.lisp to automate PR creation using the provided pseudo-code as a starting point.",
+            "dependencies": [],
+            "details": "Modify integrations/github.lisp to include the create-pr function that uses run-program to execute 'gh pr create' with formatted arguments based on the tag. Ensure proper error handling for CLI failures and authentication issues.",
+            "status": "pending",
+            "testStrategy": "Mock the GitHub CLI calls and verify that the correct command is executed with the expected arguments."
+          },
+          {
+            "id": 2,
+            "title": "Format PR Details with Rich Context",
+            "description": "Enhance the PR creation process to include rich context such as titles, bodies, and labels in the formatted arguments.",
+            "dependencies": [
+              1
+            ],
+            "details": "Extend the format-args function in integrations/github.lisp to incorporate additional context from the tag or other sources, ensuring PRs are created with meaningful titles, descriptions, and labels. Integrate with existing configuration for API keys and settings.",
+            "status": "pending",
+            "testStrategy": "Test with sample tags and verify that PRs are created with correct titles, bodies, and labels using mocked GitHub CLI responses."
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Review Assistance",
+        "description": "Help developers review multiple PRs with orchestrator analysis.",
+        "details": "Fetch PR diffs and analyze with Claude. Pseudo-code: (defun review-prs () (let ((diffs (fetch-pr-diffs))) (claude-api-call \"Review PRs\" diffs))).",
+        "testStrategy": "Provide sample PRs; verify analysis highlights issues and suggests merge order.",
+        "priority": "medium",
+        "dependencies": [
+          12,
+          18
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Fetch PR Diffs",
+            "description": "Retrieve the diffs from multiple pull requests to prepare for analysis.",
+            "dependencies": [],
+            "details": "Implement a function to fetch PR diffs from the repository API, handling pagination and error cases for multiple PRs.",
+            "status": "pending",
+            "testStrategy": "Use sample PRs to verify diffs are fetched correctly without errors."
+          },
+          {
+            "id": 2,
+            "title": "Analyze PRs with Claude API",
+            "description": "Send the fetched diffs to Claude API for intelligent review analysis.",
+            "dependencies": [
+              1
+            ],
+            "details": "Integrate Claude API call within the review function, formatting diffs appropriately and handling API responses for analysis.",
+            "status": "pending",
+            "testStrategy": "Provide mock diffs and check that API calls return expected analysis outputs."
+          },
+          {
+            "id": 3,
+            "title": "Provide Review Insights and Merge Suggestions",
+            "description": "Generate and display review insights, issues, and merge order suggestions based on Claude's analysis.",
+            "dependencies": [
+              2
+            ],
+            "details": "Process Claude's response to extract insights, highlight potential issues, and suggest optimal merge order for the PRs.",
+            "status": "pending",
+            "testStrategy": "Test with sample analyses to ensure insights are accurate and merge suggestions are logical."
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "title": "Merge Coordination",
+        "description": "Orchestrate merging with dependency awareness.",
+        "details": "Determine merge order and execute merges. Pseudo-code: (defun merge-all () (dolist (pr (sort-prs-by-deps prs)) (run-program \"git merge\" pr))).",
+        "testStrategy": "Simulate PR merges; verify order is correct and conflicts are handled.",
+        "priority": "medium",
+        "dependencies": [
+          13,
+          18
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Analyze Pull Request Dependencies",
+            "description": "Examine the dependencies between pull requests to build a dependency graph.",
+            "dependencies": [],
+            "details": "Implement a function to parse PR metadata and construct a graph where nodes are PRs and edges represent dependencies. Use topological sorting principles to ensure no circular dependencies exist.",
+            "status": "pending",
+            "testStrategy": "Use mock PR data with known dependencies; verify the graph is built correctly and detects cycles."
+          },
+          {
+            "id": 2,
+            "title": "Determine Merge Order",
+            "description": "Sort pull requests based on the dependency graph to establish a safe merge sequence.",
+            "dependencies": [
+              1
+            ],
+            "details": "Develop a sorting algorithm that respects dependencies, ensuring dependent PRs are merged after their prerequisites. Integrate with the sort-prs-by-deps function from the pseudo-code.",
+            "status": "pending",
+            "testStrategy": "Provide a set of PRs with dependencies; check that the sorted order allows merges without violating dependencies."
+          },
+          {
+            "id": 3,
+            "title": "Execute Merges in Order",
+            "description": "Run git merge commands for each pull request in the determined order.",
+            "dependencies": [
+              2
+            ],
+            "details": "Automate the execution of 'git merge' for each PR using the sorted list. Handle basic merge success and log outcomes. Incorporate the dolist loop from the pseudo-code.",
+            "status": "pending",
+            "testStrategy": "Simulate a git repository with PR branches; run the merge process and verify branches are merged in the correct sequence."
+          },
+          {
+            "id": 4,
+            "title": "Handle Merge Conflicts",
+            "description": "Detect and resolve conflicts during the merge process.",
+            "dependencies": [
+              3
+            ],
+            "details": "Implement conflict detection by checking git merge exit codes. Provide options for manual resolution or automated fixes where possible, ensuring the process pauses for user input on conflicts.",
+            "status": "pending",
+            "testStrategy": "Create scenarios with conflicting changes in PRs; test that conflicts are detected, and resolution leads to successful merges."
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "title": "Performance Optimization",
+        "description": "Optimize for low latency and resource usage.",
+        "details": "Batch status polls, cache analyses. Pseudo-code: (defun optimized-poll () (with-cached-results (poll-statuses))).",
+        "testStrategy": "Benchmark before/after; verify dashboard refresh <2s and CPU <5%.",
+        "priority": "low",
+        "dependencies": [
+          10,
+          11
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Batching and Caching for Performance",
+            "description": "Modify the system to batch status polls and implement caching for analyses to reduce latency and resource usage.",
+            "dependencies": [],
+            "details": "Update the polling function to batch requests using a loop or queue mechanism. Implement caching for analysis results using a hash table or external cache store. Integrate with the existing pseudo-code: (defun optimized-poll () (with-cached-results (poll-statuses))). Ensure thread-safety if needed.",
+            "status": "pending",
+            "testStrategy": null
+          },
+          {
+            "id": 2,
+            "title": "Benchmark Performance Improvements",
+            "description": "Measure and verify the performance gains from batching and caching optimizations.",
+            "dependencies": [
+              1
+            ],
+            "details": "Set up benchmarking tools to compare latency and CPU usage before and after changes. Run tests to ensure dashboard refresh is under 2 seconds and CPU usage is below 5%. Use profiling libraries in Common Lisp to gather metrics.",
+            "status": "pending",
+            "testStrategy": "Benchmark before/after; verify dashboard refresh <2s and CPU <5%."
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "title": "Reliability Features",
+        "description": "Add fault tolerance, state persistence, and recovery.",
+        "details": "Auto-save sessions, restart agents. Pseudo-code: (defun auto-save () (bordeaux-threads:make-thread (lambda () (save-session)))).",
+        "testStrategy": "Simulate crashes; verify sessions resume and agents restart.",
+        "priority": "medium",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Auto-Save with Threading",
+            "description": "Develop the auto-save functionality using threading to periodically save session states in the background without blocking the main application.",
+            "dependencies": [],
+            "details": "Use bordeaux-threads to create a separate thread that runs a loop to save the current session state to a file or database at regular intervals. Ensure thread safety to avoid race conditions. Pseudo-code: (defun auto-save () (bordeaux-threads:make-thread (lambda () (loop (sleep 60) (save-session))))).",
+            "status": "pending",
+            "testStrategy": "Unit tests for thread creation and session saving; integration tests to verify auto-save runs without interfering with main operations."
+          },
+          {
+            "id": 2,
+            "title": "Implement State Persistence Mechanism",
+            "description": "Create a mechanism to persist the application state, including session data and agent states, to enable recovery after crashes.",
+            "dependencies": [
+              1
+            ],
+            "details": "Define functions to serialize and deserialize state data using libraries like cl-json or cl-yaml. Store persisted data in a reliable location, such as a file system or database. Ensure data integrity and handle partial saves. Build on the auto-save thread to trigger persistence.",
+            "status": "pending",
+            "testStrategy": "Test serialization/deserialization with mock data; verify data persistence across application restarts."
+          },
+          {
+            "id": 3,
+            "title": "Implement Session Recovery Logic",
+            "description": "Add logic to recover and restore session states from persisted data upon application startup or after a crash.",
+            "dependencies": [
+              2
+            ],
+            "details": "Upon startup, check for persisted session files and load them into memory. Validate the loaded data and handle any corruption gracefully. Integrate with the state persistence to resume from the last saved state. Pseudo-code: (defun recover-session () (when (file-exists-p 'session-file) (load-session (deserialize session-file)))).",
+            "status": "pending",
+            "testStrategy": "Simulate crashes by killing the process and restarting; verify that sessions are restored correctly and no data is lost."
+          },
+          {
+            "id": 4,
+            "title": "Implement Agent Restart Logic",
+            "description": "Develop logic to automatically restart agents in their previous states after a failure or application restart.",
+            "dependencies": [
+              3
+            ],
+            "details": "Track agent states and configurations in the persisted data. Upon recovery, reinitialize and restart agents based on their saved states. Handle dependencies between agents and ensure they resume operations seamlessly. Integrate with session recovery to restart agents as part of the overall recovery process.",
+            "status": "pending",
+            "testStrategy": "Test agent restart by simulating agent failures; verify agents resume tasks and maintain state consistency post-restart."
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "title": "Usability Improvements",
+        "description": "Enhance command discoverability and error messages.",
+        "details": "Add help system and better UX. Pseudo-code: (defun help (topic) (case topic ('commands (print-commands)) ...)).",
+        "testStrategy": "User testing; verify commands are intuitive and errors are clear.",
+        "priority": "low",
+        "dependencies": [
+          14,
+          16
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Help System",
+            "description": "Develop a comprehensive help system to assist users in discovering available commands and understanding their usage.",
+            "dependencies": [],
+            "details": "Create a help function that accepts topics like 'commands' and prints relevant information. Integrate it into the command-line interface for easy access, ensuring it covers all major features with clear examples.",
+            "status": "pending",
+            "testStrategy": "Manual testing by invoking help commands and verifying output accuracy; user feedback on clarity."
+          },
+          {
+            "id": 2,
+            "title": "Enhance Error Messages and Command Discoverability",
+            "description": "Improve error messages for better clarity and add features to make commands more discoverable to users.",
+            "dependencies": [],
+            "details": "Refactor error handling to provide descriptive messages instead of generic ones. Implement command suggestions or auto-completion to aid discoverability, drawing from the help system for consistency.",
+            "status": "pending",
+            "testStrategy": "Simulate error scenarios and check message clarity; conduct usability tests to ensure commands are intuitive."
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "title": "Maintainability",
+        "description": "Ensure code clarity, documentation, and modularity.",
+        "details": "Follow code organization, add inline comments. Pseudo-code: ;; Comprehensive comments in all functions.",
+        "testStrategy": "Code review; verify unit tests cover modules and docs are up-to-date.",
+        "priority": "low",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Organize Code Structure",
+            "description": "Restructure the codebase to follow a modular organization, separating concerns into appropriate files and directories.",
+            "dependencies": [],
+            "details": "Create directories for core modules, utilities, and tests. Move related functions into dedicated files, ensuring each file has a single responsibility. Update ASDF system definition to reflect the new structure.",
+            "status": "pending",
+            "testStrategy": "Verify that the project loads correctly after reorganization and that all components are accessible."
+          },
+          {
+            "id": 2,
+            "title": "Add Inline Comments",
+            "description": "Insert comprehensive inline comments in all functions to explain logic, parameters, and return values.",
+            "dependencies": [
+              1
+            ],
+            "details": "Go through each function in the codebase and add comments starting with ;; as per the pseudo-code example. Ensure comments are clear, concise, and explain complex logic or assumptions.",
+            "status": "pending",
+            "testStrategy": "Code review to check that comments are present and accurate; run the code to ensure comments do not affect functionality."
+          },
+          {
+            "id": 3,
+            "title": "Enhance Modularity",
+            "description": "Refactor code to improve modularity by extracting reusable functions and reducing coupling between modules.",
+            "dependencies": [
+              1
+            ],
+            "details": "Identify tightly coupled code sections and break them into smaller, independent functions. Use proper encapsulation with packages and exports. Ensure modules can be tested and modified independently.",
+            "status": "pending",
+            "testStrategy": "Unit tests to verify that refactored modules work in isolation and integration tests to ensure overall system functionality."
+          },
+          {
+            "id": 4,
+            "title": "Update Documentation",
+            "description": "Create and maintain up-to-date documentation for the codebase, including README files and API docs.",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Write a comprehensive README.md explaining the project structure, setup, and usage. Generate API documentation using tools like quickdocs or manual docstrings. Keep docs synchronized with code changes.",
+            "status": "pending",
+            "testStrategy": "Manual review of documentation for completeness and accuracy; verify that new developers can set up and understand the project using the docs."
+          },
+          {
+            "id": 5,
+            "title": "Conduct Code Clarity Review",
+            "description": "Perform a thorough review of the code for clarity, readability, and adherence to best practices.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Review all code files for consistent naming conventions, indentation, and style. Remove dead code, simplify complex expressions, and ensure the code is self-explanatory where possible. Use linters if available.",
+            "status": "pending",
+            "testStrategy": "Peer code review sessions; automated linting checks to ensure style guidelines are met."
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "title": "Security Implementation",
+        "description": "Implement API key storage, audit trails, and sandboxing.",
+        "details": "Encrypt keys, log actions. Pseudo-code: (defun sanitize-prompt (text) (ppcre:regex-replace \"api_key.*\" text \"***REDACTED***\")).",
+        "testStrategy": "Security audit; verify no secrets are leaked and isolation is maintained.",
+        "priority": "high",
+        "dependencies": [
+          2,
+          9
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement API Key Encryption",
+            "description": "Develop secure encryption mechanisms for storing API keys to prevent unauthorized access.",
+            "dependencies": [
+              2
+            ],
+            "details": "Use a robust encryption library in Common Lisp to encrypt API keys before storage. Ensure keys are decrypted only when needed and handle key management securely. Integrate with the configuration loading from Task 2.",
+            "status": "pending",
+            "testStrategy": "Unit tests for encryption/decryption; verify encrypted keys cannot be read without proper decryption."
+          },
+          {
+            "id": 2,
+            "title": "Implement Audit Logging",
+            "description": "Create a logging system to record all actions and events for audit trails.",
+            "dependencies": [],
+            "details": "Set up a logging framework in core/audit.lisp to log API calls, key accesses, and agent actions. Use local-time for timestamps and ensure logs are tamper-proof. Store logs securely, possibly encrypted.",
+            "status": "pending",
+            "testStrategy": "Mock actions and verify logs are created accurately; check log integrity and access controls."
+          },
+          {
+            "id": 3,
+            "title": "Implement Prompt Sanitization",
+            "description": "Sanitize user prompts to redact sensitive information like API keys before processing.",
+            "dependencies": [],
+            "details": "Implement the sanitize-prompt function as shown in pseudo-code using cl-ppcre. Apply it to all prompts before sending to agents or APIs. Ensure it handles various formats and edge cases for redaction.",
+            "status": "pending",
+            "testStrategy": "Test with prompts containing API keys; verify redaction works and sanitized prompts are safe."
+          },
+          {
+            "id": 4,
+            "title": "Set Up Sandboxing for Agents",
+            "description": "Establish a sandboxed environment to isolate agent executions and prevent unauthorized actions.",
+            "dependencies": [
+              9
+            ],
+            "details": "Configure a sandbox using available Lisp tools or external mechanisms to restrict agent access to file system, network, etc. Integrate with the ACI from Task 9 to ensure tools run in isolation.",
+            "status": "pending",
+            "testStrategy": "Run agents in sandbox and attempt unauthorized operations; verify isolation prevents breaches."
+          },
+          {
+            "id": 5,
+            "title": "Integrate and Test Security Features",
+            "description": "Combine all security components and perform comprehensive testing to ensure overall security.",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "details": "Integrate encryption, logging, sanitization, and sandboxing into the main system. Conduct a full security audit as per the parent task's test strategy, verifying no secrets leak and isolation holds.",
+            "status": "pending",
+            "testStrategy": "End-to-end security audit; penetration testing to check for vulnerabilities in the integrated system."
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2025-10-16T18:35:16.325Z",
+      "updated": "2025-10-16T18:35:16.325Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
