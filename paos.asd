@@ -36,7 +36,8 @@
                  (:file "dashboard")
                  (:file "repl")
                  (:file "aci-tools")
-                 (:file "status-protocol"))
+                 (:file "status-protocol")
+                 (:file "orchestrator-intelligence"))
                 :depends-on ("core"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
