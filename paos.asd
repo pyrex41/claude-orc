@@ -25,7 +25,12 @@
                 ((:file "package")
                  (:file "config" :depends-on ("package"))
                  (:file "decomposer" :depends-on ("package" "config"))
-                 (:file "git" :depends-on ("package" "config"))))))
+                 (:file "git" :depends-on ("package" "config"))))
+               (:module "src"
+                :components
+                ((:file "prd-parser")
+                 (:file "ai-integration" :depends-on ("prd-parser")))
+                :depends-on ("core"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
 (asdf:defsystem #:paos/test

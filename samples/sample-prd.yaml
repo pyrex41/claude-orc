@@ -1,0 +1,45 @@
+overview: |
+  This PRD defines requirements for a new API gateway service that will handle
+  authentication, rate limiting, and request routing for all microservices.
+
+goals:
+  - Centralize authentication and authorization
+  - Implement rate limiting and throttling
+  - Provide unified API documentation
+  - Enable service mesh capabilities
+
+tasks:
+  - title: Implement JWT-based authentication
+    description: Set up JWT token generation and validation with refresh token support
+    priority: high
+    status: pending
+    
+  - title: Create rate limiting middleware
+    description: Implement token bucket algorithm for API rate limiting
+    priority: high
+    dependencies: []
+    
+  - title: Build service discovery integration
+    description: Integrate with Consul/Eureka for dynamic service discovery
+    priority: medium
+    
+  - title: Develop request routing logic
+    description: Implement path-based and header-based routing rules
+    priority: high
+    
+  - title: Set up OpenAPI documentation
+    description: Auto-generate API docs from service definitions
+    priority: medium
+
+features:
+  - Circuit breaker pattern implementation
+  - Request/response transformation
+  - API versioning support
+  - Metrics and monitoring integration
+  - Health check endpoints
+
+requirements:
+  - Must handle 10,000 requests per second
+  - Response latency should be under 50ms
+  - 99.9% uptime SLA
+  - Support for gRPC and REST protocols
