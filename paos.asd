@@ -29,7 +29,9 @@
                (:module "src"
                 :components
                 ((:file "prd-parser")
-                 (:file "ai-integration" :depends-on ("prd-parser")))
+                 (:file "ai-integration" :depends-on ("prd-parser"))
+                 (:file "tagger")
+                 (:file "expander"))
                 :depends-on ("core"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
