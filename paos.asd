@@ -34,7 +34,8 @@
                  (:file "expander")
                  (:file "zellij-integration")
                  (:file "dashboard")
-                 (:file "repl"))
+                 (:file "repl")
+                 (:file "aci-tools"))
                 :depends-on ("core"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
