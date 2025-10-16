@@ -31,7 +31,8 @@
                 ((:file "prd-parser")
                  (:file "ai-integration" :depends-on ("prd-parser"))
                  (:file "tagger")
-                 (:file "expander"))
+                 (:file "expander")
+                 (:file "zellij-integration"))
                 :depends-on ("core"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
