@@ -41,7 +41,9 @@
                  (:file "conflict-detection")
                  (:file "reliability")
                  (:file "security")
-                 (:file "main-interface"))
+                 (:file "main-interface")
+                 (:file "agent-communication")
+                 (:file "checkpoints"))
                 :depends-on ("core"))
                (:module "integrations"
                 :components
