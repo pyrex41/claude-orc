@@ -33,7 +33,8 @@
                  (:file "tagger")
                  (:file "expander")
                  (:file "zellij-integration")
-                 (:file "dashboard"))
+                 (:file "dashboard")
+                 (:file "repl"))
                 :depends-on ("core"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
