@@ -32,7 +32,8 @@
                  (:file "ai-integration" :depends-on ("prd-parser"))
                  (:file "tagger")
                  (:file "expander")
-                 (:file "zellij-integration"))
+                 (:file "zellij-integration")
+                 (:file "dashboard"))
                 :depends-on ("core"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
