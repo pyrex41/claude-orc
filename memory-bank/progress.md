@@ -1,7 +1,7 @@
 # Progress Tracking
 
 ## Overall Status
-**9 of 25 tasks complete (36%)**
+**11 of 25 tasks complete (44%)**
 
 ## What Works ✅
 
@@ -22,6 +22,13 @@
 (paos/zellij:spawn-agent tag path ctx)              ; Agent spawning
 (paos/dashboard:start-dashboard #'status-fn)        ; Real-time dashboard
 (paos/human-interface:start-repl)                   ; Interactive REPL
+
+;; Communication (Tasks 9, 11)
+(paos/aci:define-tool name desc params handler)     ; Tool definition
+(paos/aci:execute-tool name args)                   ; Tool execution
+(paos/status:write-agent-status status)             ; Status writing
+(paos/status:poll-agent-statuses tags)              ; Status polling
+(paos/status:start-status-monitor tags callback)    ; Monitoring loop
 ```
 
 ## What's Left to Build 🚧

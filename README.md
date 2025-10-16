@@ -14,7 +14,7 @@ PAOS (Parallel Agent Orchestration System) is a terminal-based multi-agent orche
 
 ## Current Status
 
-**Development Progress: 9/25 Tasks Complete (36%)**
+**Development Progress: 11/25 Tasks Complete (44%)**
 
 ### ✅ Completed Components (Session Progress)
 
@@ -54,6 +54,17 @@ PAOS (Parallel Agent Orchestration System) is a terminal-based multi-agent orche
     - Status monitoring and agent control
     - Direct agent communication
     - Command history and validation
+
+#### Core Infrastructure (Tasks 9, 11)
+11. **Agent-Computer Interface (ACI)** - Tool definitions for agents
+    - 8 core tools (git, filesystem, task management)
+    - JSON schema validation
+    - Safety and command whitelisting
+    
+12. **Agent Status Protocol** - JSON-based communication
+    - Status file reading/writing
+    - Change detection and polling
+    - Monitoring loop with callbacks
 
 ### 🚧 Next Up (Ready to Start)
 
