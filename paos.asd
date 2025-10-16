@@ -35,7 +35,8 @@
                  (:file "zellij-integration")
                  (:file "dashboard")
                  (:file "repl")
-                 (:file "aci-tools"))
+                 (:file "aci-tools")
+                 (:file "status-protocol"))
                 :depends-on ("core"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
