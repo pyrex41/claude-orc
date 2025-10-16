@@ -39,7 +39,11 @@
                  (:file "status-protocol")
                  (:file "orchestrator-intelligence")
                  (:file "conflict-detection"))
-                :depends-on ("core"))))
+                :depends-on ("core"))
+               (:module "integrations"
+                :components
+                ((:file "github"))
+                :depends-on ("core" "src"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
 (asdf:defsystem #:paos/test
