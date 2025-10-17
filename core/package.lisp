@@ -101,10 +101,23 @@
 (defpackage #:paos/prd-parser
   (:use #:cl #:paos/core)
   (:export
+   ;; Format-specific parsers
    #:parse-markdown-prd
    #:parse-plain-text-prd
    #:parse-yaml-prd
-   #:extract-tasks))
+   
+   ;; Auto-detection
+   #:detect-prd-format
+   #:parse-prd
+   
+   ;; Task extraction
+   #:extract-tasks
+   
+   ;; AI-enhanced parsing
+   #:parse-prd-with-ai
+   #:analyze-prd-with-claude
+   #:analyze-prd-quality
+   #:resolve-ambiguous-requirements))
 
 (defpackage #:paos/tagger
   (:use #:cl #:paos/core)

@@ -25,7 +25,34 @@
                 ((:file "package")
                  (:file "config" :depends-on ("package"))
                  (:file "decomposer" :depends-on ("package" "config"))
-                 (:file "git" :depends-on ("package" "config"))))))
+                 (:file "git" :depends-on ("package" "config"))))
+               (:module "src"
+                :components
+                ((:file "prd-parser")
+                 (:file "ai-integration" :depends-on ("prd-parser"))
+                 (:file "tagger")
+                 (:file "expander")
+                 (:file "zellij-integration")
+                 (:file "dashboard")
+                 (:file "repl")
+                 (:file "aci-tools")
+                 (:file "status-protocol")
+                 (:file "orchestrator-intelligence")
+                 (:file "conflict-detection")
+                 (:file "reliability")
+                 (:file "security")
+                 (:file "main-interface")
+                 (:file "agent-communication")
+                 (:file "checkpoints")
+                 (:file "performance")
+                 (:file "usability"))
+                :depends-on ("core"))
+               (:module "integrations"
+                :components
+                ((:file "github")
+                 (:file "review")
+                 (:file "merge"))
+                :depends-on ("core" "src"))))
   :in-order-to ((test-op (test-op #:paos/test))))
 
 (asdf:defsystem #:paos/test
