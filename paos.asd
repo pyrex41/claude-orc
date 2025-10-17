@@ -24,6 +24,7 @@
                 :components
                 ((:file "package")
                  (:file "config" :depends-on ("package"))
+                 (:file "ai-utils" :depends-on ("package" "config"))
                  (:file "decomposer" :depends-on ("package" "config"))
                  (:file "git" :depends-on ("package" "config"))))
                (:module "src"
@@ -52,8 +53,8 @@
                 ((:file "github")
                  (:file "review")
                  (:file "merge"))
-                :depends-on ("core" "src"))))
-  :in-order-to ((test-op (test-op #:paos/test))))
+                :depends-on ("core" "src")))
+  :in-order-to ((test-op (test-op "paos/test"))))
 
 (asdf:defsystem #:paos/test
   :description "Test system for PAOS"

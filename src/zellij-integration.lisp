@@ -191,29 +191,34 @@ Params are keyword-value pairs that get converted to CLI args."
 ;;; ============================================================================
 
 (defun create-agent-context (tag tasks worktree-path)
-  "Create a context file for an agent with its assigned tasks."
-  (let ((context-file (format nil "~A/.paos/context-~A.md" 
-                             worktree-path tag)))
-    (ensure-directories-exist (directory-namestring context-file))
-    
-    (with-open-file (stream context-file
-                           :direction :output
-                           :if-exists :supersede)
-      (format stream "# PAOS Agent Context: ~A~%~%" tag)
-      (format stream "## Assigned Tasks~%~%")
-      (dolist (task tasks)
-        (format stream "### ~A~%~%" (gethash "title" task))
-        (format stream "**Description:** ~A~%~%" (gethash "description" task))
-        (when (gethash "tags" task)
-          (format stream "**Tags:** ~{~A~^, ~}~%~%" (gethash "tags" task)))
-        (when (gethash "subtasks" task)
-          (format stream "~%**Subtasks:**~%")
-          (dolist (subtask (gethash "subtasks" task))
-            (format stream "- ~A~%" (gethash "title" subtask))))
-        (format stream "~%---~%~%")))
-    
-    (log-info "Created agent context: ~A" context-file)
-    context-file))
+  "Create a context file for an agent with its assigned tasks.
+Returns context file path or NIL on failure."
+  (handler-case
+      (let ((context-file (format nil "~A/.paos/context-~A.md"
+                                 worktree-path tag)))
+        (ensure-directories-exist (directory-namestring context-file))
+
+        (with-open-file (stream context-file
+                               :direction :output
+                               :if-exists :supersede)
+          (format stream "# PAOS Agent Context: ~A~%~%" tag)
+          (format stream "## Assigned Tasks~%~%")
+          (dolist (task tasks)
+            (format stream "### ~A~%~%" (gethash "title" task))
+            (format stream "**Description:** ~A~%~%" (gethash "description" task))
+            (when (gethash "tags" task)
+              (format stream "**Tags:** ~{~A~^, ~}~%~%" (gethash "tags" task)))
+            (when (gethash "subtasks" task)
+              (format stream "~%**Subtasks:**~%")
+              (dolist (subtask (gethash "subtasks" task))
+                (format stream "- ~A~%" (gethash "title" subtask))))
+            (format stream "~%---~%~%")))
+
+        (log-info "Created agent context: ~A" context-file)
+        context-file)
+    (error (e)
+      (log-error "Failed to create context file for ~A: ~A" tag e)
+      nil)))
 
 ;;; ============================================================================
 ;;; Utilities
@@ -286,15 +291,15 @@ Params are keyword-value pairs that get converted to CLI args."
 
 (defun log-error (format-string &rest args)
   "Log error message."
-  (format *error-output* "ERROR: ~A~%" 
+  (format *error-output* "ERROR: ~A~%"
           (apply #'format nil format-string args)))
 
 (defun log-warn (format-string &rest args)
   "Log warning message."
-  (format *error-output* "WARN: ~A~%" 
+  (format *error-output* "WARN: ~A~%"
           (apply #'format nil format-string args)))
 
 (defun log-info (format-string &rest args)
   "Log info message."
-  (format t "INFO: ~A~%" 
+  (format t "INFO: ~A~%"
           (apply #'format nil format-string args)))

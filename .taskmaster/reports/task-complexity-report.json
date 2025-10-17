@@ -1,8 +1,8 @@
 {
 	"meta": {
-		"generatedAt": "2025-10-16T18:57:10.548Z",
+		"generatedAt": "2025-10-17T01:30:20.638Z",
 		"tasksAnalyzed": 25,
-		"totalTasks": 25,
+		"totalTasks": 29,
 		"analysisCount": 25,
 		"thresholdScore": 5,
 		"projectName": "Taskmaster",
@@ -10,204 +10,204 @@
 	},
 	"complexityAnalysis": [
 		{
-			"taskId": 1,
-			"taskTitle": "Project Setup and Dependencies",
-			"complexityScore": 4,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for initializing the Common Lisp project structure, setting up the ASDF system definition with dependencies, and ensuring SBCL and Quicklisp are installed and configured.",
-			"reasoning": "This task involves setting up a new project with multiple dependencies and tools, requiring familiarity with Common Lisp ecosystem. Effort includes writing ASDF definitions and package setup, with moderate testing for loading. Dependencies are minimal, but integration with external tools like Quicklisp adds some challenge."
-		},
-		{
-			"taskId": 2,
-			"taskTitle": "Configuration Management",
-			"complexityScore": 5,
-			"recommendedSubtasks": 2,
-			"expansionPrompt": "Break down the task into subtasks for implementing YAML configuration file loading and validation, and handling environment variables securely.",
-			"reasoning": "Involves file I/O, parsing, validation, and security for API keys. Moderate effort for error handling and testing with various config scenarios. Depends on project setup, increasing integration complexity."
-		},
-		{
-			"taskId": 3,
-			"taskTitle": "Task Decomposition Engine",
-			"complexityScore": 6,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for integrating with Taskmaster CLI via external process calls, parsing YAML output, and handling errors in decomposition.",
-			"reasoning": "Requires external tool integration, process management, and output parsing. Technical challenges in CLI interaction and error handling. Depends on setup and config, with testing needing sample PRDs."
-		},
-		{
 			"taskId": 4,
 			"taskTitle": "PRD Parsing",
 			"complexityScore": 7,
 			"recommendedSubtasks": 4,
-			"expansionPrompt": "Break down the task into subtasks for supporting multiple PRD formats (Markdown, text, YAML), integrating Claude API for analysis, and extracting structured task information.",
-			"reasoning": "Extends decomposition with multi-format support and LLM integration. Higher effort for API calls, parsing logic, and format handling. Testing across formats adds complexity."
+			"expansionPrompt": "Break down PRD parsing into subtasks for handling different formats (Markdown, plain text, YAML), integrating Claude API, and testing each parser.",
+			"reasoning": "Involves parsing multiple formats, API integration, and ensuring accurate extraction, with dependencies on prior tasks; moderate technical challenges in handling varied inputs and error cases."
 		},
 		{
 			"taskId": 5,
 			"taskTitle": "Intelligent Tagging",
 			"complexityScore": 6,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for using Claude API to assign tags to tasks, implementing logic for parallel execution grouping, and validating tag assignments.",
-			"reasoning": "Involves LLM API integration for tagging and group identification. Moderate challenges in API reliability and logic for conflict-free grouping. Depends on decomposition tasks."
+			"expansionPrompt": "Decompose tagging into API integration, grouping logic, and validation subtasks.",
+			"reasoning": "Requires Claude API calls, logic for parallel grouping, and validation; dependencies add some complexity, but implementation is straightforward with existing patterns."
 		},
 		{
 			"taskId": 6,
 			"taskTitle": "Subtask Expansion",
-			"complexityScore": 7,
+			"complexityScore": 8,
 			"recommendedSubtasks": 4,
-			"expansionPrompt": "Break down the task into subtasks for generating subtasks using Claude API, supporting hierarchical decomposition (2-3 levels), and ensuring atomic subtask coverage.",
-			"reasoning": "LLM-driven expansion with hierarchy support. Effort in API integration, recursion for levels, and validation. Testing requires high-level task samples."
-		},
-		{
-			"taskId": 7,
-			"taskTitle": "Git Worktree Management",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for creating Git worktrees with naming conventions, initializing environments, and managing worktree branches.",
-			"reasoning": "Git command integration and environment setup. Moderate effort for process calls and error handling. Testing with test repos adds some complexity."
+			"expansionPrompt": "Expand into API integration, hierarchical logic, atomicity validation, and error handling subtasks.",
+			"reasoning": "Involves recursive expansion, API usage, and ensuring coverage up to 3 levels; higher effort due to hierarchical management and testing atomicity."
 		},
 		{
 			"taskId": 8,
 			"taskTitle": "Sub-Agent Spawning",
-			"complexityScore": 7,
+			"complexityScore": 6,
 			"recommendedSubtasks": 4,
-			"expansionPrompt": "Break down the task into subtasks for integrating with Zellij to create tabs, spawning Claude Code instances with context, and handling initialization errors.",
-			"reasoning": "Terminal multiplexer integration and agent spawning. Challenges in Zellij API and context passing. Depends on worktrees, with testing in sessions."
+			"expansionPrompt": "Subtasks for Zellij integration, Claude spawning, error handling, and end-to-end testing.",
+			"reasoning": "Integrates with external tools like Zellij and Claude Code; moderate effort in spawning and context passing, with testing in sessions."
 		},
 		{
 			"taskId": 9,
 			"taskTitle": "Agent-Computer Interface (ACI)",
-			"complexityScore": 6,
+			"complexityScore": 7,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for defining tool schemas following Anthropic practices, implementing tool validation, and integrating tools with Claude Code.",
-			"reasoning": "Designing and implementing tool definitions for agents. Moderate effort in schema design and validation. Testing with mocks."
+			"expansionPrompt": "Break into schema definition, validation, and integration subtasks.",
+			"reasoning": "Defining tools per Anthropic practices, validation, and passing to Claude; technical in ensuring compliance and error handling."
 		},
 		{
 			"taskId": 10,
 			"taskTitle": "Real-Time Status Dashboard",
 			"complexityScore": 6,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for implementing ANSI escape code-based UI, rendering progress bars, and handling real-time updates without flicker.",
-			"reasoning": "Terminal UI development with real-time rendering. Challenges in ANSI codes and refresh logic. Testing for visual correctness."
+			"expansionPrompt": "Subtasks for ANSI UI setup, progress rendering, and flicker-free updates.",
+			"reasoning": "Terminal UI with ANSI codes; challenges in real-time updates without flicker, but standard implementation."
 		},
 		{
 			"taskId": 11,
 			"taskTitle": "Agent Status Protocol",
 			"complexityScore": 5,
 			"recommendedSubtasks": 2,
-			"expansionPrompt": "Break down the task into subtasks for implementing JSON-based status reporting to files and polling mechanism in the orchestrator.",
-			"reasoning": "File-based communication and polling. Moderate effort for JSON handling and error cases. Testing with mock files."
+			"expansionPrompt": "Subtasks for status writing and polling logic.",
+			"reasoning": "Simple JSON file-based communication; low complexity with basic file I/O and parsing."
 		},
 		{
 			"taskId": 12,
 			"taskTitle": "Orchestrator Intelligence",
 			"complexityScore": 6,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for integrating Claude API for status analysis, formatting statuses for LLM input, and processing recommendations.",
-			"reasoning": "LLM analysis of statuses. Effort in API calls and insight generation. Testing with mock data."
+			"expansionPrompt": "Decompose into status formatting, API analysis, and recommendation processing.",
+			"reasoning": "API integration for analysis; moderate effort in processing LLM outputs and integrating insights."
 		},
 		{
 			"taskId": 13,
 			"taskTitle": "Conflict Detection",
-			"complexityScore": 6,
+			"complexityScore": 7,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for scanning worktrees for file overlaps, detecting dependency conflicts, and generating alerts.",
-			"reasoning": "Analysis of multiple worktrees for conflicts. Moderate challenges in overlap detection logic. Testing with conflicting scenarios."
+			"expansionPrompt": "Subtasks for file overlap scanning, dependency conflict detection, and alert generation.",
+			"reasoning": "Scanning worktrees and dependencies; technical in graph analysis and proactive detection."
 		},
 		{
 			"taskId": 14,
 			"taskTitle": "Human-in-the-Loop Interaction",
-			"complexityScore": 7,
+			"complexityScore": 8,
 			"recommendedSubtasks": 4,
-			"expansionPrompt": "Break down the task into subtasks for implementing REPL commands in the orchestrator, handling user inputs, and integrating with dashboard and agents.",
-			"reasoning": "Interactive REPL development with command handling. Higher effort for UX and integration. Testing manual interactions."
+			"expansionPrompt": "Break into REPL structure, command implementation, input validation, and dashboard integration.",
+			"reasoning": "Combines REPL and dashboard; high effort in concurrent handling and user interaction."
 		},
 		{
 			"taskId": 15,
 			"taskTitle": "Direct Agent Communication",
 			"complexityScore": 5,
 			"recommendedSubtasks": 2,
-			"expansionPrompt": "Break down the task into subtasks for enabling Zellij tab switching and ensuring agents respond to direct commands like pause.",
-			"reasoning": "Zellij integration for communication. Moderate effort for tab management and command processing. Testing interactions."
+			"expansionPrompt": "Subtasks for tab switching and command response logic.",
+			"reasoning": "Simple tab management and command parsing; low complexity with existing Zellij integration."
 		},
 		{
 			"taskId": 16,
 			"taskTitle": "Orchestrator Interface",
-			"complexityScore": 6,
+			"complexityScore": 7,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for combining dashboard and REPL into a single interface, handling concurrent updates, and ensuring responsiveness.",
-			"reasoning": "Merging UI components with REPL. Challenges in concurrency and interface management. Testing full sessions."
+			"expansionPrompt": "Subtasks for dashboard-REPL integration, concurrent updates, and responsiveness optimization.",
+			"reasoning": "Merging interfaces with concurrency; moderate challenges in threading and optimization."
 		},
 		{
 			"taskId": 17,
 			"taskTitle": "Checkpoint System",
 			"complexityScore": 6,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for configuring checkpoints in config, implementing pause logic at subtasks or blockers, and handling resume after approval.",
-			"reasoning": "Config-driven pausing and resumption. Moderate effort for state management. Testing pause-resume cycles."
+			"expansionPrompt": "Subtasks for config setup, pause logic, and resume handling.",
+			"reasoning": "Threading for pauses and resumes; moderate effort in state management."
 		},
 		{
 			"taskId": 18,
 			"taskTitle": "Pull Request Management",
 			"complexityScore": 5,
 			"recommendedSubtasks": 2,
-			"expansionPrompt": "Break down the task into subtasks for integrating GitHub CLI for PR creation and formatting PR details with context.",
-			"reasoning": "CLI integration for PRs. Effort in argument formatting and error handling. Testing with mocks."
+			"expansionPrompt": "Subtasks for GitHub CLI integration and PR detail formatting.",
+			"reasoning": "CLI integration; straightforward with error handling."
 		},
 		{
 			"taskId": 19,
 			"taskTitle": "Review Assistance",
 			"complexityScore": 6,
 			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down the task into subtasks for fetching PR diffs, analyzing with Claude API, and providing review insights and merge suggestions.",
-			"reasoning": "Diff fetching and LLM analysis. Moderate challenges in diff processing. Testing with sample PRs."
+			"expansionPrompt": "Subtasks for diff fetching, API analysis, and insight generation.",
+			"reasoning": "API for review; moderate in processing diffs and suggestions."
 		},
 		{
 			"taskId": 20,
 			"taskTitle": "Merge Coordination",
-			"complexityScore": 7,
+			"complexityScore": 8,
 			"recommendedSubtasks": 4,
-			"expansionPrompt": "Break down the task into subtasks for determining merge order based on dependencies, executing merges, and handling conflicts.",
-			"reasoning": "Dependency-aware merging with Git commands. Higher effort for order logic and conflict resolution. Testing simulations."
+			"expansionPrompt": "Break into dependency analysis, order determination, merge execution, and conflict handling.",
+			"reasoning": "Graph sorting and merge automation; high effort in dependency resolution and conflict management."
 		},
 		{
 			"taskId": 21,
 			"taskTitle": "Performance Optimization",
-			"complexityScore": 5,
+			"complexityScore": 6,
 			"recommendedSubtasks": 2,
-			"expansionPrompt": "Break down the task into subtasks for batching status polls, implementing caching for analyses, and benchmarking improvements.",
-			"reasoning": "Optimization techniques like caching. Moderate effort for profiling and tuning. Testing performance metrics."
+			"expansionPrompt": "Subtasks for batching/caching implementation and benchmarking.",
+			"reasoning": "Optimizing polls and caches; moderate technical challenges in benchmarking."
 		},
 		{
 			"taskId": 22,
 			"taskTitle": "Reliability Features",
-			"complexityScore": 7,
+			"complexityScore": 8,
 			"recommendedSubtasks": 4,
-			"expansionPrompt": "Break down the task into subtasks for implementing auto-save with threading, session recovery, and agent restart logic.",
-			"reasoning": "Fault tolerance with threading and persistence. Challenges in concurrency and crash recovery. Testing simulations."
+			"expansionPrompt": "Subtasks for auto-save, persistence, recovery, and agent restart logic.",
+			"reasoning": "Threading, serialization, and recovery; high complexity in fault tolerance."
 		},
 		{
 			"taskId": 23,
 			"taskTitle": "Usability Improvements",
-			"complexityScore": 4,
+			"complexityScore": 5,
 			"recommendedSubtasks": 2,
-			"expansionPrompt": "Break down the task into subtasks for adding a help system and improving error messages and command discoverability.",
-			"reasoning": "UX enhancements. Lower effort for documentation and messaging. Testing user feedback."
+			"expansionPrompt": "Subtasks for help system and error message enhancements.",
+			"reasoning": "UI/UX additions; low effort with standard implementations."
 		},
 		{
 			"taskId": 24,
 			"taskTitle": "Maintainability",
-			"complexityScore": 3,
-			"recommendedSubtasks": 0,
-			"expansionPrompt": "No expansion needed as this is an ongoing practice.",
-			"reasoning": "Ensuring code quality and docs. Low effort, more of a standard practice. No subtasks needed."
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Subtasks for code organization, comments, modularity, documentation, and clarity review.",
+			"reasoning": "Refactoring and documentation; moderate to high effort across multiple aspects."
 		},
 		{
 			"taskId": 25,
 			"taskTitle": "Security Implementation",
-			"complexityScore": 8,
+			"complexityScore": 9,
 			"recommendedSubtasks": 5,
-			"expansionPrompt": "Break down the task into subtasks for encrypting API keys, implementing audit logging, sanitizing prompts, and ensuring sandboxing for agents.",
-			"reasoning": "High-stakes security features like encryption and isolation. Significant effort for secure implementation and audit. Testing security audits."
+			"expansionPrompt": "Break into encryption, logging, sanitization, sandboxing, and integration testing.",
+			"reasoning": "High-stakes security features; significant effort in encryption, auditing, and isolation."
+		},
+		{
+			"taskId": 26,
+			"taskTitle": "Fix ASDF test operation syntax in paos.asd",
+			"complexityScore": 3,
+			"recommendedSubtasks": 0,
+			"expansionPrompt": "No expansion needed; directly fix the syntax error.",
+			"reasoning": "Simple syntax fix in build file; minimal effort."
+		},
+		{
+			"taskId": 27,
+			"taskTitle": "Add missing package exports for public functions",
+			"complexityScore": 4,
+			"recommendedSubtasks": 0,
+			"expansionPrompt": "No expansion needed; add export statements to packages.",
+			"reasoning": "Straightforward addition of exports; low complexity."
+		},
+		{
+			"taskId": 28,
+			"taskTitle": "Fix forward function reference issues",
+			"complexityScore": 4,
+			"recommendedSubtasks": 0,
+			"expansionPrompt": "No expansion needed; reorder or declare functions.",
+			"reasoning": "Basic compilation fixes; minimal technical challenges."
+		},
+		{
+			"taskId": 29,
+			"taskTitle": "Verify PAOS system loads successfully",
+			"complexityScore": 2,
+			"recommendedSubtasks": 0,
+			"expansionPrompt": "No expansion needed; run load test.",
+			"reasoning": "Simple verification test; very low effort."
 		}
 	]
 }

@@ -103,29 +103,16 @@ Return ONLY valid JSON."
 (defun analyze-agent-statuses (statuses)
   "Analyze agent statuses using Claude API and return insights."
   (handler-case
-      (let* ((api-key (get-api-key))
+      (let* ((api-key (paos/core:get-api-key))
              (prompt (format-analysis-prompt statuses))
-             (response (call-claude-api api-key prompt))
+             (response (paos/core:call-claude-api api-key prompt))
              (analysis (parse-analysis-response response)))
         analysis)
     (error (e)
       (log-error "Status analysis failed: ~A" e)
       (create-fallback-analysis statuses))))
 
-(defun call-claude-api (api-key prompt)
-  "Call Claude API for analysis."
-  (let* ((headers `(("x-api-key" . ,api-key)
-                   ("anthropic-version" . "2023-06-01")
-                   ("content-type" . "application/json")))
-         (body (cl-json:encode-json-to-string
-                `(("model" . "claude-3-5-sonnet-20241022")
-                  ("max_tokens" . 4096)
-                  ("messages" . ((("role" . "user")
-                                 ("content" . ,prompt)))))))
-         (response (dexador:post "https://api.anthropic.com/v1/messages"
-                                :headers headers
-                                :content body)))
-    response))
+;;; Note: call-claude-api now provided by paos/core
 
 (defun parse-analysis-response (response)
   "Parse Claude's analysis response."
@@ -357,10 +344,7 @@ callback is called with analysis results."
     (format nil "~4,'0D-~2,'0D-~2,'0D ~2,'0D:~2,'0D:~2,'0D"
             year month date hour min sec)))
 
-(defun get-api-key ()
-  "Get Anthropic API key."
-  (or (uiop:getenv "ANTHROPIC_API_KEY")
-      (error "ANTHROPIC_API_KEY not found")))
+;;; Note: get-api-key now provided by paos/core
 
 (defun log-error (format-string &rest args)
   "Log error message."

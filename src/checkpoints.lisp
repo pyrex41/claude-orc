@@ -85,17 +85,19 @@ Returns checkpoint object."
       
       ;; Notify orchestrator
       (notify-checkpoint checkpoint)
-      
+
+      ;; TODO: Implement agent state management in zellij integration
       ;; Update agent state
-      (paos/zellij:update-agent-state agent-tag 
-                                     :paused t
-                                     :checkpoint checkpoint)
-      
+      ;; (paos/zellij:update-agent-state agent-tag
+      ;;                                :paused t
+      ;;                                :checkpoint checkpoint)
+
+      ;; TODO: Implement command sending in zellij integration
       ;; Send pause command to agent
-      (paos/zellij:send-command-to-agent 
-       (list :tag agent-tag :session "paos-orchestrator" :tab-name agent-tag)
-       "pause")
-      
+      ;; (paos/zellij:send-command-to-agent
+      ;;  (list :tag agent-tag :session "paos-orchestrator" :tab-name agent-tag)
+      ;;  "pause")
+
       checkpoint)))
 
 (defun notify-checkpoint (checkpoint)
@@ -130,17 +132,19 @@ Returns checkpoint object."
 (defun resume-from-checkpoint (checkpoint)
   "Resume agent execution from checkpoint."
   (let ((agent-tag (checkpoint-agent checkpoint)))
-    
+
+    ;; TODO: Implement agent state management in zellij integration
     ;; Update agent state
-    (paos/zellij:update-agent-state agent-tag 
-                                   :paused nil
-                                   :checkpoint nil)
-    
+    ;; (paos/zellij:update-agent-state agent-tag
+    ;;                                :paused nil
+    ;;                                :checkpoint nil)
+
+    ;; TODO: Implement command sending in zellij integration
     ;; Send resume command
-    (paos/zellij:send-command-to-agent
-     (list :tag agent-tag :session "paos-orchestrator" :tab-name agent-tag)
-     "resume")
-    
+    ;; (paos/zellij:send-command-to-agent
+    ;;  (list :tag agent-tag :session "paos-orchestrator" :tab-name agent-tag)
+    ;;  "resume")
+
     (log-info "Resumed agent ~A from checkpoint" agent-tag)))
 
 (defun reject-checkpoint (checkpoint-id reason)

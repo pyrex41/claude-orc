@@ -17,19 +17,15 @@
   "Use Claude API to analyze and enhance PRD content.
 Returns enhanced task structure with AI-generated insights."
   (handler-case
-      (let* ((api-key (get-api-key))
+      (let* ((api-key (paos/core:get-api-key))
              (prompt (build-prd-analysis-prompt prd-content))
-             (response (call-claude-api api-key prompt)))
+             (response (paos/core:call-claude-api api-key prompt)))
         (parse-claude-response response))
     (error (e)
       (log-error "Claude API analysis failed: ~A" e)
       nil)))
 
-(defun get-api-key ()
-  "Get the Anthropic API key from config or environment."
-  (or (uiop:getenv "ANTHROPIC_API_KEY")
-      (paos/core:api-key "anthropic")
-      (error "ANTHROPIC_API_KEY not found in environment or config")))
+;;; Note: get-api-key now provided by paos/core
 
 (defun build-prd-analysis-prompt (prd-content)
   "Build a prompt for Claude to analyze PRD and extract structured tasks."
@@ -59,20 +55,7 @@ Return ONLY valid JSON in this format:
   \"suggestedApproach\": \"...\"
 }" prd-content))
 
-(defun call-claude-api (api-key prompt)
-  "Make API call to Claude with the given prompt."
-  (let* ((headers `(("x-api-key" . ,api-key)
-                   ("anthropic-version" . "2023-06-01")
-                   ("content-type" . "application/json")))
-         (body (cl-json:encode-json-to-string
-                `(("model" . ,*claude-model*)
-                  ("max_tokens" . 4096)
-                  ("messages" . ((("role" . "user")
-                                 ("content" . ,prompt)))))))
-         (response (dexador:post *claude-api-base*
-                                :headers headers
-                                :content body)))
-    response))
+;;; Note: call-claude-api now provided by paos/core
 
 (defun parse-claude-response (response)
   "Parse Claude API response and extract task data."
@@ -165,10 +148,10 @@ then enhances with Claude API analysis."
 (defun analyze-prd-quality (file-path)
   "Analyze PRD quality and completeness using Claude."
   (handler-case
-      (let* ((api-key (get-api-key))
+      (let* ((api-key (paos/core:get-api-key))
              (content (read-file-to-string file-path))
              (prompt (build-quality-analysis-prompt content))
-             (response (call-claude-api api-key prompt)))
+             (response (paos/core:call-claude-api api-key prompt)))
         (parse-quality-response response))
     (error (e)
       (log-error "PRD quality analysis failed: ~A" e)
@@ -202,13 +185,13 @@ Return ONLY valid JSON." prd-content))
 (defun resolve-ambiguous-requirements (requirements-text)
   "Use Claude to clarify ambiguous requirements."
   (handler-case
-      (let* ((api-key (get-api-key))
+      (let* ((api-key (paos/core:get-api-key))
              (prompt (format nil "Clarify and make specific these ambiguous requirements:
 
 ~A
 
 Provide clear, actionable, testable requirements." requirements-text))
-             (response (call-claude-api api-key prompt)))
+             (response (paos/core:call-claude-api api-key prompt)))
         (extract-text-from-response response))
     (error (e)
       (log-error "Requirement clarification failed: ~A" e)

@@ -279,8 +279,11 @@ Returns recovered session or NIL if no state found."
 ;;; ============================================================================
 
 (defun setup-crash-handler ()
-  "Setup handler to save state on crashes."
-  #+sbcl
+  "Setup handler to save state on crashes.
+NOTE: Signal handling code commented out - needs modernization for current SBCL."
+  ;; TODO: Modernize for current SBCL signal handling APIs
+  ;; Old sb-ext:enable-interrupt API is deprecated
+  #+sbcl-old-signal-api
   (sb-ext:enable-interrupt sb-unix:sigterm
                           (lambda (signal code scp)
                             (declare (ignore signal code scp))
@@ -288,8 +291,8 @@ Returns recovered session or NIL if no state found."
                             (when *current-session*
                               (save-session *current-session*))
                             (sb-ext:quit)))
-  
-  (log-info "Crash handler installed"))
+
+  (log-info "Crash handler setup (stub - signal handling disabled)"))
 
 (defun safe-shutdown ()
   "Safely shutdown PAOS with state saving."

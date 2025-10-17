@@ -63,9 +63,9 @@ Returns analysis with insights and merge order suggestions."
   (handler-case
       (let* ((pr-diffs (fetch-pr-diffs pr-numbers))
              (pr-metadata (mapcar #'fetch-pr-metadata pr-numbers))
-             (api-key (get-api-key))
+             (api-key (paos/core:get-api-key))
              (prompt (build-review-prompt pr-diffs pr-metadata))
-             (response (call-claude-api api-key prompt))
+             (response (paos/core:call-claude-api api-key prompt :max-tokens 8192))
              (analysis (parse-review-response response)))
         analysis)
     (error (e)
@@ -118,20 +118,7 @@ Returns analysis with insights and merge order suggestions."
     (format stream "  ]~%")
     (format stream "}~%")))
 
-(defun call-claude-api (api-key prompt)
-  "Call Claude API for review analysis."
-  (let* ((headers `(("x-api-key" . ,api-key)
-                   ("anthropic-version" . "2023-06-01")
-                   ("content-type" . "application/json")))
-         (body (cl-json:encode-json-to-string
-                `(("model" . "claude-3-5-sonnet-20241022")
-                  ("max_tokens" . 8192)
-                  ("messages" . ((("role" . "user")
-                                 ("content" . ,prompt)))))))
-         (response (dexador:post "https://api.anthropic.com/v1/messages"
-                                :headers headers
-                                :content body)))
-    response))
+;;; Note: call-claude-api now provided by paos/core
 
 (defun parse-review-response (response)
   "Parse Claude's review analysis."
@@ -324,11 +311,7 @@ Returns analysis with insights and merge order suggestions."
 ;;; ============================================================================
 ;;; Utilities
 ;;; ============================================================================
-
-(defun get-api-key ()
-  "Get Anthropic API key."
-  (or (uiop:getenv "ANTHROPIC_API_KEY")
-      (error "ANTHROPIC_API_KEY not found")))
+;;; Note: get-api-key and call-claude-api now provided by paos/core
 
 (defun log-error (format-string &rest args)
   "Log error message."

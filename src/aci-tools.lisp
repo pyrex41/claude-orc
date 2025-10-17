@@ -32,6 +32,106 @@ Parameters should be a hash table with JSON schema format."
     tool))
 
 ;;; ============================================================================
+;;; Tool Execution Handlers
+;;; ============================================================================
+;;; These must be defined before the tool definitions that reference them
+
+(defun execute-git-status (args)
+  "Execute git status command."
+  (let ((path (gethash "worktree_path" args)))
+    (handler-case
+        (uiop:run-program (list "git" "-C" path "status" "--short")
+                         :output :string)
+      (error (e)
+        (format nil "Error: ~A" e)))))
+
+(defun execute-git-diff (args)
+  "Execute git diff command."
+  (let ((path (gethash "worktree_path" args))
+        (staged (gethash "staged" args)))
+    (handler-case
+        (uiop:run-program
+         (if staged
+             (list "git" "-C" path "diff" "--cached")
+             (list "git" "-C" path "diff"))
+         :output :string)
+      (error (e)
+        (format nil "Error: ~A" e)))))
+
+(defun execute-git-commit (args)
+  "Execute git commit command."
+  (let ((path (gethash "worktree_path" args))
+        (message (gethash "message" args))
+        (files (gethash "files" args)))
+    (handler-case
+        (let ((cmd (append (list "git" "-C" path "commit" "-m" message)
+                          (when files (cons "--" files)))))
+          (uiop:run-program cmd :output :string))
+      (error (e)
+        (format nil "Error: ~A" e)))))
+
+(defun execute-file-read (args)
+  "Execute file read."
+  (let ((path (gethash "path" args)))
+    (handler-case
+        (with-open-file (stream path)
+          (let ((contents (make-string (file-length stream))))
+            (read-sequence contents stream)
+            contents))
+      (error (e)
+        (format nil "Error reading file: ~A" e)))))
+
+(defun execute-file-write (args)
+  "Execute file write."
+  (let ((path (gethash "path" args))
+        (content (gethash "content" args)))
+    (handler-case
+        (progn
+          (ensure-directories-exist (directory-namestring path))
+          (with-open-file (stream path
+                                 :direction :output
+                                 :if-exists :supersede)
+            (write-sequence content stream))
+          (format nil "Successfully wrote to ~A" path))
+      (error (e)
+        (format nil "Error writing file: ~A" e)))))
+
+(defun execute-list-directory (args)
+  "Execute directory listing."
+  (let ((path (gethash "path" args)))
+    (handler-case
+        (let ((entries (uiop:directory-files path)))
+          (format nil "~{~A~%~}" (mapcar #'namestring entries)))
+      (error (e)
+        (format nil "Error listing directory: ~A" e)))))
+
+(defun execute-update-task-status (args)
+  "Execute task status update."
+  (let ((task-id (gethash "task_id" args))
+        (status (gethash "status" args))
+        (notes (gethash "notes" args)))
+    (format nil "Task ~A updated to ~A~@[ (~A)~]" task-id status notes)))
+
+(defun execute-request-human-input (args)
+  "Execute human input request."
+  (let ((question (gethash "question" args))
+        (context (gethash "context" args)))
+    (format nil "Human input requested: ~A~@[ Context: ~A~]" question context)))
+
+(defun execute-run-command (args)
+  "Execute shell command (with safety checks)."
+  (let ((command (gethash "command" args))
+        (path (gethash "worktree_path" args)))
+    (if (command-safe-p command)
+        (handler-case
+            (uiop:run-program command
+                            :output :string
+                            :directory path)
+          (error (e)
+            (format nil "Error: ~A" e)))
+        (format nil "Error: Command not whitelisted: ~A" command))))
+
+;;; ============================================================================
 ;;; Core Tool Definitions
 ;;; ============================================================================
 
@@ -238,105 +338,6 @@ Parameters should be a hash table with JSON schema format."
   #'execute-run-command
   :category "execution"
   :safe nil)
-
-;;; ============================================================================
-;;; Tool Execution Handlers
-;;; ============================================================================
-
-(defun execute-git-status (args)
-  "Execute git status command."
-  (let ((path (gethash "worktree_path" args)))
-    (handler-case
-        (uiop:run-program (list "git" "-C" path "status" "--short")
-                         :output :string)
-      (error (e)
-        (format nil "Error: ~A" e)))))
-
-(defun execute-git-diff (args)
-  "Execute git diff command."
-  (let ((path (gethash "worktree_path" args))
-        (staged (gethash "staged" args)))
-    (handler-case
-        (uiop:run-program 
-         (if staged
-             (list "git" "-C" path "diff" "--cached")
-             (list "git" "-C" path "diff"))
-         :output :string)
-      (error (e)
-        (format nil "Error: ~A" e)))))
-
-(defun execute-git-commit (args)
-  "Execute git commit command."
-  (let ((path (gethash "worktree_path" args))
-        (message (gethash "message" args))
-        (files (gethash "files" args)))
-    (handler-case
-        (let ((cmd (append (list "git" "-C" path "commit" "-m" message)
-                          (when files (cons "--" files)))))
-          (uiop:run-program cmd :output :string))
-      (error (e)
-        (format nil "Error: ~A" e)))))
-
-(defun execute-file-read (args)
-  "Execute file read."
-  (let ((path (gethash "path" args)))
-    (handler-case
-        (with-open-file (stream path)
-          (let ((contents (make-string (file-length stream))))
-            (read-sequence contents stream)
-            contents))
-      (error (e)
-        (format nil "Error reading file: ~A" e)))))
-
-(defun execute-file-write (args)
-  "Execute file write."
-  (let ((path (gethash "path" args))
-        (content (gethash "content" args)))
-    (handler-case
-        (progn
-          (ensure-directories-exist (directory-namestring path))
-          (with-open-file (stream path
-                                 :direction :output
-                                 :if-exists :supersede)
-            (write-sequence content stream))
-          (format nil "Successfully wrote to ~A" path))
-      (error (e)
-        (format nil "Error writing file: ~A" e)))))
-
-(defun execute-list-directory (args)
-  "Execute directory listing."
-  (let ((path (gethash "path" args)))
-    (handler-case
-        (let ((entries (uiop:directory-files path)))
-          (format nil "~{~A~%~}" (mapcar #'namestring entries)))
-      (error (e)
-        (format nil "Error listing directory: ~A" e)))))
-
-(defun execute-update-task-status (args)
-  "Execute task status update."
-  (let ((task-id (gethash "task_id" args))
-        (status (gethash "status" args))
-        (notes (gethash "notes" args)))
-    (format nil "Task ~A updated to ~A~@[ (~A)~]" task-id status notes)))
-
-(defun execute-request-human-input (args)
-  "Execute human input request."
-  (let ((question (gethash "question" args))
-        (context (gethash "context" args)))
-    (format nil "Human input requested: ~A~@[ Context: ~A~]" question context)))
-
-(defun execute-run-command (args)
-  "Execute shell command (with safety checks)."
-  (let ((command (gethash "command" args))
-        (path (gethash "worktree_path" args)))
-    (if (command-safe-p command)
-        (handler-case
-            (uiop:run-program command
-                            :output :string
-                            :directory path)
-          (error (e)
-            (format nil "Error: ~A" e)))
-        (format nil "Error: Command not whitelisted: ~A" command))))
 
 ;;; ============================================================================
 ;;; Tool Validation

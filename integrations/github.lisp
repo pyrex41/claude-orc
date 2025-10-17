@@ -167,9 +167,9 @@ Returns PR URL or NIL on failure."
 (defun format-pr-with-ai (tag worktree)
   "Use Claude to generate rich PR description."
   (handler-case
-      (let* ((api-key (get-api-key))
+      (let* ((api-key (paos/core:get-api-key))
              (prompt (build-pr-generation-prompt tag worktree))
-             (response (call-claude-api api-key prompt))
+             (response (paos/core:call-claude-api api-key prompt))
              (pr-content (parse-pr-response response)))
         pr-content)
     (error (e)
@@ -203,24 +203,11 @@ Return JSON:
   \"highlights\": [\"key changes\"]
 }"
           tag
-          (mapcar (lambda (t) (gethash "title" t))
+          (mapcar (lambda (task) (gethash "title" task))
                  (getf worktree :tasks))
           (get-changed-files worktree)))
 
-(defun call-claude-api (api-key prompt)
-  "Call Claude API for PR generation."
-  (let* ((headers `(("x-api-key" . ,api-key)
-                   ("anthropic-version" . "2023-06-01")
-                   ("content-type" . "application/json")))
-         (body (cl-json:encode-json-to-string
-                `(("model" . "claude-3-5-sonnet-20241022")
-                  ("max_tokens" . 2048)
-                  ("messages" . ((("role" . "user")
-                                 ("content" . ,prompt)))))))
-         (response (dexador:post "https://api.anthropic.com/v1/messages"
-                                :headers headers
-                                :content body)))
-    response))
+;;; Note: call-claude-api now provided by paos/core
 
 (defun parse-pr-response (response)
   "Parse Claude's PR generation response."
@@ -319,10 +306,7 @@ Returns list of (tag . pr-url) pairs."
 ;;; ============================================================================
 ;;; Utilities
 ;;; ============================================================================
-
-(defun get-api-key ()
-  "Get API key for Claude."
-  (uiop:getenv "ANTHROPIC_API_KEY"))
+;;; Note: get-api-key and call-claude-api now provided by paos/core
 
 (defun log-error (format-string &rest args)
   "Log error message."

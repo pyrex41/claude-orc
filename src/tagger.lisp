@@ -15,9 +15,9 @@
   "Assign domain-specific tags to tasks using Claude API.
 Returns tasks with added 'tags' field."
   (handler-case
-      (let* ((api-key (get-api-key))
+      (let* ((api-key (paos/core:get-api-key))
              (prompt (build-tagging-prompt tasks))
-             (response (call-claude-api api-key prompt))
+             (response (paos/core:call-claude-api api-key prompt))
              (tagged-data (parse-tagging-response response)))
         (apply-tags-to-tasks tasks tagged-data))
     (error (e)
@@ -234,7 +234,7 @@ Returns list of parallel-safe task groups."
 (defun can-run-parallel-p (tasks)
   "Check if a group of tasks can run in parallel.
 Returns T if no dependencies exist between tasks in the group."
-  (let ((task-ids (mapcar (lambda (t) (gethash "id" t)) tasks)))
+  (let ((task-ids (mapcar (lambda (task) (gethash "id" task)) tasks)))
     (every (lambda (task)
              (let ((deps (gethash "dependencies" task)))
                (or (null deps)
@@ -348,26 +348,7 @@ Simplified heuristic based on task descriptions."
 ;;; ============================================================================
 ;;; Utility Functions
 ;;; ============================================================================
-
-(defun get-api-key ()
-  "Get Anthropic API key."
-  (or (uiop:getenv "ANTHROPIC_API_KEY")
-      (error "ANTHROPIC_API_KEY not found")))
-
-(defun call-claude-api (api-key prompt)
-  "Call Claude API (shared implementation)."
-  (let* ((headers `(("x-api-key" . ,api-key)
-                   ("anthropic-version" . "2023-06-01")
-                   ("content-type" . "application/json")))
-         (body (cl-json:encode-json-to-string
-                `(("model" . "claude-3-5-sonnet-20241022")
-                  ("max_tokens" . 4096)
-                  ("messages" . ((("role" . "user")
-                                 ("content" . ,prompt)))))))
-         (response (dexador:post "https://api.anthropic.com/v1/messages"
-                                :headers headers
-                                :content body)))
-    response))
+;;; Note: get-api-key and call-claude-api now provided by paos/core
 
 (defun log-error (format-string &rest args)
   "Log error message."

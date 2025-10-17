@@ -136,7 +136,7 @@
         "dependencies": [
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -144,7 +144,7 @@
             "description": "Develop a parser module to handle Markdown-formatted PRDs, extracting key elements like tasks, descriptions, and dependencies.",
             "dependencies": [],
             "details": "Create a function that uses regex or a Markdown parser library to identify sections, lists, and metadata in Markdown PRDs, converting them into structured data objects.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with sample Markdown PRDs; verify extraction of tasks, descriptions, and dependencies matches expected structured output."
           },
           {
@@ -153,7 +153,7 @@
             "description": "Build a parser for plain text PRDs to identify and extract task-related information without formatting cues.",
             "dependencies": [],
             "details": "Implement logic to scan plain text content for patterns like task titles, descriptions, and dependency indicators using string matching or NLP techniques, outputting structured data.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use various plain text PRD examples; ensure accurate parsing of tasks and dependencies, handling edge cases like missing sections."
           },
           {
@@ -162,7 +162,7 @@
             "description": "Create a parser specifically for YAML-formatted PRDs to directly deserialize into structured task information.",
             "dependencies": [],
             "details": "Utilize a YAML parsing library to load and validate YAML PRDs, mapping fields to task structures including IDs, titles, descriptions, and dependencies.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Validate with YAML PRD samples; confirm structured extraction and error handling for invalid YAML formats."
           },
           {
@@ -175,7 +175,7 @@
               3
             ],
             "details": "Extend the decomposer to call Claude API with prompts like 'Analyze PRD' for content analysis, using results to refine or supplement parsed data into task structures.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Mock API responses; test integration with parsers to ensure accurate task extraction and handle API failures gracefully."
           }
         ]
@@ -348,7 +348,7 @@
         "dependencies": [
           7
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -356,7 +356,7 @@
             "description": "Set up integration with Zellij to programmatically create new tabs for each agent group.",
             "dependencies": [],
             "details": "Use Zellij's command-line interface or API to create tabs. Implement a function to spawn a new tab with a given tag, ensuring it handles session management and tab naming correctly.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test in a Zellij session by creating tabs manually and verifying they appear with correct names."
           },
           {
@@ -367,7 +367,7 @@
               1
             ],
             "details": "Modify the spawn-agent function to run the 'claude' command with the '--context' flag pointing to the relevant context file. Ensure the command is executed within the newly created tab.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Spawn instances in a test Zellij session and check that Claude Code starts with the correct context loaded."
           },
           {
@@ -379,7 +379,7 @@
               2
             ],
             "details": "Implement try-catch or error-checking mechanisms around the zellij:new-tab and run-program calls. Log errors and provide fallback options, such as retrying or notifying the user.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Simulate failure scenarios, like invalid context files or Zellij not running, and verify that errors are caught and handled gracefully."
           },
           {
@@ -392,7 +392,7 @@
               3
             ],
             "details": "Create a test script that spawns multiple agents in sequence, checks for successful tab creation, context loading, and error-free initialization. Validate in a controlled Zellij environment.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run the full workflow in a Zellij session with mock agent groups and verify all subtasks complete without issues."
           }
         ]
@@ -1200,11 +1200,187 @@
             "testStrategy": "End-to-end security audit; penetration testing to check for vulnerabilities in the integrated system."
           }
         ]
+      },
+      {
+        "id": 26,
+        "title": "Fix ASDF test operation syntax in paos.asd",
+        "description": "The paos.asd file has invalid syntax in the test operation definition that prevents the system from loading",
+        "details": "",
+        "testStrategy": "",
+        "status": "done",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Fix ASDF test operation syntax at line 56 in paos.asd",
+            "description": "Correct the invalid syntax in :in-order-to clause at line 56 - should be (test-op (test-op \"paos/test\")) not ((test-op (test-op \"paos/test\")))",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 26
+          },
+          {
+            "id": 2,
+            "title": "Verify ASDF system definition loads without errors",
+            "description": "Test that the corrected paos.asd loads successfully using (asdf:load-asd (pathname \"paos.asd\"))",
+            "details": "",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "parentTaskId": 26
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "title": "Add missing package exports for public functions",
+        "description": "Multiple packages are missing export statements for their public functions, causing undefined function errors when other packages try to use them",
+        "details": "",
+        "testStrategy": "",
+        "status": "done",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create shared AI utilities module",
+            "description": "Create a shared paos/ai-utils module or add common AI utilities to paos/core to eliminate duplicate functions like get-api-key and call-claude-api across 6+ files",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 27
+          },
+          {
+            "id": 2,
+            "title": "Consolidate duplicate functions in tagger.lisp, expander.lisp, orchestrator-intelligence.lisp",
+            "description": "Replace duplicate get-api-key and call-claude-api implementations with imports from the shared module in these three files",
+            "details": "",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "parentTaskId": 27
+          },
+          {
+            "id": 3,
+            "title": "Consolidate duplicate functions in ai-integration.lisp, review.lisp, github.lisp",
+            "description": "Replace duplicate get-api-key and call-claude-api implementations with imports from the shared module in integrations files",
+            "details": "",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "parentTaskId": 27
+          },
+          {
+            "id": 4,
+            "title": "Remove redundant export statements from dashboard.lisp",
+            "description": "Remove the redundant export calls at lines 397-402 in dashboard.lisp that conflict with package definition in core/package.lisp",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 27
+          },
+          {
+            "id": 5,
+            "title": "Verify package structure and test compilation",
+            "description": "Ensure all packages properly use shared utilities and test that the system compiles without undefined function errors",
+            "details": "",
+            "status": "done",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "parentTaskId": 27
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "title": "Fix forward function reference issues",
+        "description": "Several files have functions that are referenced before they are defined, causing compilation failures",
+        "details": "",
+        "testStrategy": "",
+        "status": "done",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Identify files with forward reference issues using compilation",
+            "description": "Attempt compilation to identify which specific files have functions called before definition, documenting each file and function pair",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 28
+          },
+          {
+            "id": 2,
+            "title": "Fix forward references by reordering or adding declarations",
+            "description": "For each identified issue, either reorder function definitions or add (declaim (ftype ...)) forward declarations as appropriate for Common Lisp",
+            "details": "",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "parentTaskId": 28
+          },
+          {
+            "id": 3,
+            "title": "Test compilation of all affected files",
+            "description": "Verify that all previously failing files now compile successfully without forward reference errors",
+            "details": "",
+            "status": "done",
+            "dependencies": [
+              2
+            ],
+            "parentTaskId": 28
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "title": "Verify PAOS system loads successfully",
+        "description": "Run the system loading test to ensure all compilation issues are resolved and the system works",
+        "details": "",
+        "testStrategy": "",
+        "status": "done",
+        "dependencies": [
+          "26",
+          "27",
+          "28"
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Run full PAOS system compilation",
+            "description": "Execute (asdf:load-system :paos) and capture all compilation output, errors, and warnings",
+            "details": "",
+            "status": "done",
+            "dependencies": [],
+            "parentTaskId": 29
+          },
+          {
+            "id": 2,
+            "title": "Document successful load and any remaining warnings",
+            "description": "Verify system loads successfully (even if with warnings), document the final state, and note any non-critical issues for future fixes",
+            "details": "",
+            "status": "done",
+            "dependencies": [
+              1
+            ],
+            "parentTaskId": 29
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-10-16T18:35:16.325Z",
-      "updated": "2025-10-16T20:47:14.280Z",
+      "updated": "2025-10-17T03:37:53.359Z",
       "description": "Tasks for master context"
     }
   },

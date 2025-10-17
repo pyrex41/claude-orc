@@ -388,3 +388,8 @@ agent-status-fn should be a function that returns list of agent statuses."
   "Run dashboard demo with mock data."
   (log-info "Starting dashboard demo (press Ctrl+C to stop)...")
   (start-dashboard #'mock-agent-status-fn :refresh-interval 1))
+
+;;; ============================================================================
+;;; Package Exports
+;;; ============================================================================
+;;; Note: All exports are handled in core/package.lisp

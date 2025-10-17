@@ -24,9 +24,9 @@ Returns task with populated subtasks array."
     (return-from expand-task task))
   
   (handler-case
-      (let* ((api-key (get-api-key))
+      (let* ((api-key (paos/core:get-api-key))
              (prompt (build-expansion-prompt task depth))
-             (response (call-claude-api api-key prompt))
+             (response (paos/core:call-claude-api api-key prompt))
              (subtasks (parse-expansion-response response)))
         
         ;; Add subtasks to task
@@ -181,13 +181,13 @@ Return ONLY valid JSON:
 (defun get-expansion-statistics (task)
   "Get statistics about task expansion."
   (let ((stats (make-hash-table :test 'equal)))
-    (labels ((count-subtasks (t depth)
-               (let ((subtasks (gethash "subtasks" t)))
-                 (setf (gethash depth stats)
-                       (+ (or (gethash depth stats) 0)
-                          (length subtasks)))
-                 (dolist (st subtasks)
-                   (count-subtasks st (1+ depth))))))
+     (labels ((count-subtasks (task depth)
+                (let ((subtasks (gethash "subtasks" task)))
+                  (setf (gethash depth stats)
+                        (+ (or (gethash depth stats) 0)
+                           (length subtasks)))
+                  (dolist (st subtasks)
+                    (count-subtasks st (1+ depth))))))
       (count-subtasks task 1))
     stats))
 
@@ -351,26 +351,7 @@ Returns validation report."
 ;;; ============================================================================
 ;;; Utility Functions
 ;;; ============================================================================
-
-(defun get-api-key ()
-  "Get Anthropic API key."
-  (or (uiop:getenv "ANTHROPIC_API_KEY")
-      (error "ANTHROPIC_API_KEY not found")))
-
-(defun call-claude-api (api-key prompt)
-  "Call Claude API."
-  (let* ((headers `(("x-api-key" . ,api-key)
-                   ("anthropic-version" . "2023-06-01")
-                   ("content-type" . "application/json")))
-         (body (cl-json:encode-json-to-string
-                `(("model" . "claude-3-5-sonnet-20241022")
-                  ("max_tokens" . 4096)
-                  ("messages" . ((("role" . "user")
-                                 ("content" . ,prompt)))))))
-         (response (dexador:post "https://api.anthropic.com/v1/messages"
-                                :headers headers
-                                :content body)))
-    response))
+;;; Note: get-api-key and call-claude-api now provided by paos/core
 
 (defun log-error (format-string &rest args)
   "Log error message."

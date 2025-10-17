@@ -13,6 +13,14 @@
    #:worktree-root
    #:zellij-session-name
 
+   ;; AI Utilities
+   #:get-api-key
+   #:call-claude-api
+   #:parse-claude-response
+   #:call-claude
+   #:*claude-api-base*
+   #:*claude-model*
+
    ;; Orchestrator
    #:start-orchestrator
    #:stop-orchestrator
@@ -144,10 +152,30 @@
 (defpackage #:paos/zellij
   (:use #:cl #:paos/core)
   (:export
-   #:zellij-tab-new
-   #:zellij-tab-switch
-   #:zellij-tab-close
-   #:zellij-session-info))
+   ;; Tab management
+   #:create-zellij-tab
+   #:switch-zellij-tab
+   #:close-zellij-tab
+   #:list-zellij-tabs
+
+   ;; Agent spawning
+   #:spawn-agent
+   #:send-to-tab
+   #:spawn-agent-with-retry
+   #:validate-spawn-result
+
+   ;; Session management
+   #:create-zellij-session
+   #:attach-to-session
+   #:session-exists-p
+   #:get-session-info
+
+   ;; Context management
+   #:create-agent-context
+
+   ;; Utilities
+   #:check-zellij-installed
+   #:format-tab-name))
 
 (defpackage #:paos/aci
   (:use #:cl #:paos/core)
@@ -162,19 +190,78 @@
    #:ansi-dashboard
    #:render-progress-bar
    #:clear-screen
-   #:move-cursor))
+   #:move-cursor
+   #:create-dashboard
+   #:render-dashboard
+   #:update-dashboard
+   #:start-dashboard
+   #:stop-dashboard
+   #:colorize
+   #:demo-dashboard
+   ;; ANSI color codes
+   #:*ansi-reset*
+   #:*ansi-bold*
+   #:*ansi-red*
+   #:*ansi-green*
+   #:*ansi-yellow*
+   #:*ansi-blue*
+   #:*ansi-magenta*
+   #:*ansi-cyan*
+   #:*ansi-white*))
 
 (defpackage #:paos/status
   (:use #:cl #:paos/core)
   (:export
+   ;; Class and constructor
    #:agent-status
+   #:create-agent-status
+
+   ;; Accessors
+   #:status-tag
+   #:status-state
+   #:status-progress
+   #:status-current-task
+   #:status-completed-tasks
+   #:status-errors
+   #:status-last-update
+   #:status-metadata
+
+   ;; I/O operations
+   #:write-agent-status
+   #:read-agent-status
+   #:update-agent-status
    #:write-json-status
    #:read-json-status
-   #:status-changed-p))
+
+   ;; Status monitoring
+   #:poll-agent-statuses
+   #:poll-all-statuses
+   #:status-changed-p
+   #:get-changed-statuses
+
+   ;; Aggregation and analysis
+   #:summarize-statuses
+   #:get-stale-agents
+
+   ;; Monitoring loop
+   #:start-status-monitor
+   #:stop-status-monitor))
 
 (defpackage #:paos/ai
   (:use #:cl #:paos/core)
   (:export
+   ;; Analysis functions
+   #:analyze-agent-statuses
+   #:process-analysis-recommendations
+   #:execute-recommendations
+   #:display-analysis
+
+   ;; Continuous analysis
+   #:start-continuous-analysis
+   #:stop-continuous-analysis
+   #:get-latest-analysis
+
+   ;; Legacy exports
    #:call-claude
    #:analyze-statuses
    #:generate-recommendations))
@@ -182,8 +269,23 @@
 (defpackage #:paos/conflicts
   (:use #:cl #:paos/core)
   (:export
-   #:scan-overlaps
+   ;; Conflict detection
    #:detect-conflicts
+   #:find-file-overlaps
+   #:find-dependency-conflicts
+   #:detect-semantic-conflicts
+
+   ;; Alert generation
+   #:generate-conflict-alerts
+   #:display-conflicts
+   #:export-conflict-report
+
+   ;; Continuous monitoring
+   #:start-conflict-monitoring
+   #:stop-conflict-monitoring
+
+   ;; Legacy exports
+   #:scan-overlaps
    #:generate-alerts))
 
 (defpackage #:paos/human-interface
@@ -204,7 +306,26 @@
 (defpackage #:paos/github
   (:use #:cl #:paos/core)
   (:export
+   ;; PR creation
    #:create-pr
+   #:create-prs-for-worktrees
+   #:format-pr-with-ai
+   #:generate-pr-title
+   #:generate-pr-body
+
+   ;; PR management
+   #:list-prs
+   #:get-pr-status
+   #:merge-pr
+
+   ;; PR utilities
+   #:get-changed-files
+   #:extract-pr-dependencies
+
+   ;; CLI utilities
+   #:check-gh-cli
+
+   ;; Legacy exports
    #:get-pr-diffs
    #:format-pr-body))
 
@@ -233,10 +354,42 @@
 (defpackage #:paos/reliability
   (:use #:cl #:paos/core #:bordeaux-threads)
   (:export
-   #:auto-save-thread
-   #:load-saved-state
+   ;; Session state class and accessors
+   #:session-state
+   #:create-session-state
+   #:state-agents
+   #:state-worktrees
+   #:state-config
+   #:state-start-time
+   #:state-last-save
+   #:state-metadata
+
+   ;; Auto-save
+   #:start-auto-save
+   #:stop-auto-save
+
+   ;; State persistence
+   #:save-session
+   #:load-session
    #:backup-state
-   #:recover-session))
+   #:clean-old-backups
+
+   ;; Recovery
+   #:recover-session
+   #:recover-from-backup
+   #:restart-agents
+
+   ;; Session management
+   #:update-session-agents
+   #:update-session-worktrees
+
+   ;; Crash handling
+   #:setup-crash-handler
+   #:safe-shutdown
+
+   ;; Legacy exports
+   #:auto-save-thread
+   #:load-saved-state))
 
 (defpackage #:paos/usability
   (:use #:cl #:paos/core)
@@ -248,10 +401,36 @@
 (defpackage #:paos/security
   (:use #:cl #:paos/core)
   (:export
-   #:encrypt-api-keys
+   ;; Encryption
+   #:initialize-encryption
+   #:encrypt-api-key
+   #:decrypt-api-key
+   #:rotate-encryption-key
+
+   ;; Audit logging
    #:audit-log
-   #:sanitize-prompts
-   #:setup-sandbox))
+   #:audit-api-call
+   #:audit-key-access
+   #:audit-agent-action
+   #:audit-security-event
+
+   ;; Sanitization
+   #:sanitize-prompt
+   #:sanitize-data
+
+   ;; Sandboxing
+   #:setup-sandbox
+   #:validate-command
+   #:validate-file-access
+
+   ;; Security integration
+   #:secure-api-call
+   #:secure-file-operation
+   #:generate-security-report
+
+   ;; Legacy exports
+   #:encrypt-api-keys
+   #:sanitize-prompts))
 
 ;; Main PAOS package
 (defpackage #:paos

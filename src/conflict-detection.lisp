@@ -86,7 +86,7 @@ Returns list of detected conflicts."
 (defun analyze-task-dependencies (tasks worktree)
   "Analyze dependencies within a worktree's tasks."
   (let ((conflicts '())
-        (task-ids (mapcar (lambda (t) (gethash "id" t)) tasks)))
+        (task-ids (mapcar (lambda (tsk) (gethash "id" tsk)) tasks)))
     
     (dolist (task tasks)
       (let ((deps (gethash "dependencies" task)))
@@ -125,8 +125,8 @@ Returns list of detected conflicts."
                (setf (gethash task-id stack) t)
                (setf (gethash task-id visited) t)
                
-               (let* ((task (find task-id tasks 
-                                 :key (lambda (t) (gethash "id" t))
+               (let* ((task (find task-id tasks
+                                 :key (lambda (tsk) (gethash "id" tsk))
                                  :test #'equal))
                       (deps (when task (gethash "dependencies" task))))
                  (when deps
@@ -166,8 +166,8 @@ Returns list of detected conflicts."
 (defun task-exists-in-worktree-p (task-id worktree)
   "Check if a task exists in a worktree."
   (let ((tasks (getf worktree :tasks)))
-    (find task-id tasks 
-          :key (lambda (t) (gethash "id" t))
+    (find task-id tasks
+          :key (lambda (tsk) (gethash "id" tsk))
           :test #'equal)))
 
 (defun make-dependency-conflict (type task-id dep-id worktree-tag)

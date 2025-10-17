@@ -129,7 +129,7 @@
         (cons :event-type event-type)
         (cons :severity (or severity "info"))
         (cons :data data)
-        (cons :pid (uiop:getpid))))
+        (cons :pid (get-process-id))))
 
 (defun write-audit-entry (entry)
   "Write audit entry to log file."
@@ -331,6 +331,18 @@ Returns sanitized text with secrets replaced by ***REDACTED***."
     (setf (gethash "allowed_commands" report) *allowed-commands*)
     (setf (gethash "blocked_paths" report) *blocked-paths*)
     report))
+
+;;; ============================================================================
+;;; Utilities
+;;; ============================================================================
+
+(defun get-process-id ()
+  "Get process ID in a portable way."
+  #+sbcl (sb-posix:getpid)
+  #+ccl (ccl::getpid)
+  #+ecl (ext:getpid)
+  #+clisp (ext:process-id)
+  #-(or sbcl ccl ecl clisp) 0)  ; Fallback for other implementations
 
 ;;; ============================================================================
 ;;; Logging

@@ -76,8 +76,8 @@ Returns a hash table with extracted tasks, sections, and metadata."
   "Determine if a line represents a task (not just any list item)."
   (and text
        (> (length text) 10)  ; Minimum length
-       (or (ppcre:scan "\\b(implement|create|build|add|develop|set up|configure)\\b" text :case-insensitive-mode t)
-           (ppcre:scan "\\b(should|must|need to|will)\\b" text :case-insensitive-mode t))))
+       (or (ppcre:scan "(?i)\\b(implement|create|build|add|develop|set up|configure)\\b" text)
+           (ppcre:scan "(?i)\\b(should|must|need to|will)\\b" text))))
 
 (defun make-task-from-text (text section-title)
   "Create a task structure from extracted text and section title."
@@ -168,11 +168,9 @@ Uses pattern matching to identify tasks, descriptions, and dependencies."
         ;; Numbered items
         (ppcre:scan "^\\s*\\d+[\\.\\)]" line)
         ;; Action words at start
-        (ppcre:scan "^\\s*(implement|create|build|add|develop|set up|configure|ensure|provide)" 
-                    line :case-insensitive-mode t)
+        (ppcre:scan "(?i)^\\s*(implement|create|build|add|develop|set up|configure|ensure|provide)" line)
         ;; Modal verbs indicating requirements
-        (ppcre:scan "\\b(should|must|need to|will|shall)\\s+(implement|create|build|add)" 
-                    line :case-insensitive-mode t)
+        (ppcre:scan "(?i)\\b(should|must|need to|will|shall)\\s+(implement|create|build|add)" line)
         ;; Task list indicators
         (ppcre:scan "^\\s*[-*•]\\s+[A-Z]" line))))
 
