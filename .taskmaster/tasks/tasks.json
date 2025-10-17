@@ -191,7 +191,7 @@
           3,
           4
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -199,7 +199,7 @@
             "description": "Set up and implement the integration with the Claude API to assign domain-specific tags (e.g., 'ui', 'backend') to tasks based on their descriptions and details.",
             "dependencies": [],
             "details": "Create a function to format tasks into a suitable input for the Claude API, make the API call using the provided pseudo-code as a base, and parse the response to extract tags. Ensure error handling for API failures and rate limits. Use libraries like dexador for HTTP requests if needed.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Mock API responses with sample tasks and verify that correct tags are assigned without errors."
           },
           {
@@ -210,7 +210,7 @@
               1
             ],
             "details": "After tagging, implement a function to identify dependencies and conflicts among tasks. Use the tags to categorize tasks and create groups where tasks can run in parallel. Pseudo-code: (defun group-tasks (tagged-tasks) (analyze-dependencies tagged-tasks) (create-groups tagged-tasks)). Handle edge cases like circular dependencies.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Provide a set of tagged tasks with known dependencies; verify that groups are formed correctly and no conflicting tasks are in the same group."
           },
           {
@@ -222,7 +222,7 @@
               2
             ],
             "details": "Implement checks to validate tag relevance to task content, and verify that grouped tasks do not have overlapping dependencies or conflicts. Include logging for discrepancies and potential re-tagging. Pseudo-code: (defun validate-tags (tasks groups) (check-tag-accuracy tasks) (verify-group-safety groups)).",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use sample tasks and groups; run validations and confirm that alerts are raised for inaccuracies or conflicts, and that correct assignments pass."
           }
         ]
@@ -238,7 +238,7 @@
           3,
           5
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -246,7 +246,7 @@
             "description": "Set up the necessary code to call the Claude API for generating subtasks from high-level tasks.",
             "dependencies": [],
             "details": "Implement a function in core/subtask-expander.lisp that uses dexador to make API calls to Claude, passing the task description and prompting for 3-8 subtasks. Handle API key from config and parse JSON responses.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Mock API responses and verify correct subtasks are generated from sample tasks."
           },
           {
@@ -257,7 +257,7 @@
               1
             ],
             "details": "Create recursive functions to expand subtasks into further subtasks if needed, ensuring up to 3 levels. Use a data structure to track hierarchy and prevent infinite recursion. Integrate with the Claude API call for deeper levels.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with nested task examples, ensuring hierarchy is maintained and levels do not exceed 3."
           },
           {
@@ -269,7 +269,7 @@
               2
             ],
             "details": "Add validation logic to check each subtask for atomicity (single responsibility) and completeness (covers all aspects of parent task). Use Claude for refinement if subtasks are not atomic or missing coverage.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Provide high-level tasks and verify subtasks are executable units that collectively address the full task without gaps."
           },
           {
@@ -282,7 +282,7 @@
               3
             ],
             "details": "Add try-catch blocks around API calls, fallback mechanisms for failed expansions, and checks for malformed subtasks. Ensure the system retries or logs errors gracefully, maintaining system stability.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Simulate API errors and invalid inputs; confirm the system handles them without crashing and produces valid subtasks."
           }
         ]
@@ -407,7 +407,7 @@
         "dependencies": [
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -415,7 +415,7 @@
             "description": "Research and define JSON schemas for tools like git_commit and file_read, ensuring they align with Anthropic's best practices for tool definitions, including proper parameter types and descriptions.",
             "dependencies": [],
             "details": "Create a structured schema in agents/tools.lisp using Lisp data structures that mirror JSON schemas, with fields for name, description, and parameters. Ensure schemas are comprehensive and follow Anthropic guidelines for clarity and safety.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Validate schemas against sample tool calls using mock data to ensure they parse correctly."
           },
           {
@@ -426,7 +426,7 @@
               1
             ],
             "details": "Add functions in agents/tools.lisp to validate each tool schema, such as checking required parameters, data types, and ensuring no invalid entries. Implement error reporting for malformed tools.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use unit tests with valid and invalid tool definitions to verify validation catches errors and passes correct schemas."
           },
           {
@@ -437,7 +437,7 @@
               2
             ],
             "details": "Modify the code to load and pass the *tools* list to Claude Code, handling serialization if needed. Integrate with the agent interface to allow tool calls during execution.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Mock Claude Code interactions; test full tool execution flow, including error handling and successful tool invocations."
           }
         ]
@@ -453,7 +453,7 @@
           1,
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -461,7 +461,7 @@
             "description": "Set up the basic terminal UI framework using ANSI escape codes for clearing the screen and positioning the cursor.",
             "dependencies": [],
             "details": "In ui/dashboard.lisp, define functions to clear the screen and position the cursor using ANSI escape sequences like ~C[2J for clear screen and ~C[H for home position. Ensure compatibility with common terminals.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run the UI in a terminal emulator and verify that the screen clears and cursor repositions correctly without errors."
           },
           {
@@ -472,7 +472,7 @@
               1
             ],
             "details": "Extend the dashboard to include progress bar rendering, using characters like █ for filled portions and ░ for empty. Calculate percentages from status data and format accordingly in the print-status function.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Simulate various status percentages and check that progress bars display accurately and proportionally in the terminal."
           },
           {
@@ -483,7 +483,7 @@
               2
             ],
             "details": "Modify the display-dashboard function to refresh only changed parts of the UI, using cursor positioning to overwrite specific lines instead of clearing the entire screen each time. Incorporate timing controls to poll statuses periodically.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Simulate continuous status updates and observe the dashboard for any flicker; measure refresh times to ensure smooth, flicker-free updates."
           }
         ]
@@ -499,7 +499,7 @@
           8,
           9
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -507,7 +507,7 @@
             "description": "Develop the functionality for agents to write structured JSON status reports to shared files, including handling of status data like progress, errors, and timestamps.",
             "dependencies": [],
             "details": "Modify agent code to serialize status information into JSON format and write it to files named /shared/status-{tag}.json. Ensure atomic writes to avoid corruption and include error handling for file operations. Use libraries like cl-json for serialization.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Create mock agent statuses and verify JSON files are written correctly with expected data; test file locking and error scenarios."
           },
           {
@@ -516,7 +516,7 @@
             "description": "Build the polling mechanism in core/monitor.lisp to read and parse JSON status files from agents, collecting statuses for further processing.",
             "dependencies": [],
             "details": "Implement the poll-statuses function as per pseudo-code, using a loop to read and parse JSON from /shared/status-{tag}.json files for each agent tag. Add error handling for missing files, invalid JSON, and parsing failures. Integrate with existing orchestrator logic.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use mock status JSON files; verify polling collects and parses statuses accurately, handles missing or malformed files gracefully, and integrates with monitor logic."
           }
         ]
@@ -531,7 +531,7 @@
         "dependencies": [
           11
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -539,7 +539,7 @@
             "description": "Develop a function to transform agent statuses into a structured format suitable for input to the Claude API.",
             "dependencies": [],
             "details": "Implement the format-statuses function as per the provided pseudo-code. Ensure the output is a clear, readable string or JSON representation of statuses that can be fed into the LLM for analysis.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with various sample agent statuses to verify the formatting produces correct and readable input."
           },
           {
@@ -550,7 +550,7 @@
               1
             ],
             "details": "Implement the orchestrator-analyze function and claude-api-call as outlined in the pseudo-code. Configure API keys, handle authentication, and ensure proper error handling for API requests.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use mock formatted statuses to simulate API calls and verify that the analysis returns useful insights without errors."
           },
           {
@@ -561,7 +561,7 @@
               2
             ],
             "details": "Develop logic to extract and interpret recommendations from the Claude API response. Integrate these into the system to update agent statuses or suggest next steps, ensuring recommendations are practical and relevant.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Provide mock API responses with recommendations and test that they are correctly processed and applied to the system."
           }
         ]
@@ -577,7 +577,7 @@
           7,
           11
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -585,7 +585,7 @@
             "description": "Implement functionality to scan multiple worktrees and identify overlapping modified files that could lead to merge conflicts.",
             "dependencies": [],
             "details": "Use the provided pseudo-code as a base: (defun detect-conflicts (worktrees) (find-overlaps (mapcar #'modified-files worktrees))). Develop a function to collect modified files from each worktree and detect overlaps by comparing file paths and changes.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Create test worktrees with overlapping file modifications and verify that overlaps are correctly identified."
           },
           {
@@ -596,7 +596,7 @@
               1
             ],
             "details": "Extend the conflict detection to include dependency analysis. Check for circular dependencies or incompatible changes in dependent components. Integrate with the overlap detection to flag conflicts where dependencies are affected.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Set up scenarios with dependency chains and conflicting changes; ensure the system detects and reports these conflicts accurately."
           },
           {
@@ -607,7 +607,7 @@
               2
             ],
             "details": "Implement alert generation logic that takes detected conflicts and produces user-friendly notifications. This could include logging, UI prompts, or email alerts. Ensure alerts include details on the conflicts and suggested resolutions.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Simulate conflict detection scenarios and verify that appropriate alerts are generated and presented to the user without false positives."
           }
         ]
@@ -623,7 +623,7 @@
           8,
           10
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -631,7 +631,7 @@
             "description": "Set up the foundational REPL loop in core/orchestrator.lisp to read user inputs and process commands in a continuous loop.",
             "dependencies": [],
             "details": "Create a function like repl-loop that uses a loop to read inputs and dispatch to handlers. Ensure it handles basic input/output without crashing on invalid inputs. Integrate with existing orchestrator code.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Manually test the loop by running it and entering basic commands to verify it reads and responds without errors."
           },
           {
@@ -642,7 +642,7 @@
               1
             ],
             "details": "Extend the REPL loop with a case statement to handle commands like 'status' by calling print-status. Add more commands as needed for basic interaction, ensuring they are defined and callable within the loop.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test each command manually by invoking them in the REPL and verifying outputs match expected status information."
           },
           {
@@ -653,7 +653,7 @@
               1
             ],
             "details": "Implement input parsing logic to tokenize and validate commands, handle edge cases like empty inputs or typos, and display helpful error messages. Integrate this into the repl-loop for seamless user experience.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Provide various input scenarios (valid, invalid, edge cases) and verify parsing works correctly, with appropriate error handling."
           },
           {
@@ -665,7 +665,7 @@
               3
             ],
             "details": "Modify the REPL commands to interact with the dashboard (e.g., switching tabs) and agents (e.g., sending feedback or queries). Ensure data flows correctly between components, using shared protocols or APIs as defined in related tasks.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Manually test integration by using REPL commands to interact with dashboard and agents, verifying that actions like sending feedback update the system appropriately."
           }
         ]
@@ -681,7 +681,7 @@
           8,
           14
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -689,7 +689,7 @@
             "description": "Develop functionality to enable switching between Zellij tabs for direct communication with agents, allowing developers to focus on specific agent tabs.",
             "dependencies": [],
             "details": "Integrate Zellij API or command-line interface to implement tab switching. Use the provided pseudo-code as a basis: (defun focus-agent (tag) (zellij:switch-to-tab tag)). Ensure the function handles tag validation and error cases for non-existent tabs. This builds on the sub-agent spawning in task 8.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test in a Zellij session by spawning multiple tabs and verifying that switching commands correctly focus on the intended tab without errors."
           },
           {
@@ -700,7 +700,7 @@
               1
             ],
             "details": "Modify agent logic in the Claude Code instances to parse incoming messages for commands. For 'pause', implement state management to halt agent activities. Ensure commands are processed asynchronously and responses are echoed back in the tab. Integrate with the tab switching to allow command sending after focusing.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Interact with running agents in Zellij tabs by sending commands like 'pause'; verify that the agent state changes appropriately and responses are displayed, maintaining state across interactions."
           }
         ]
@@ -716,7 +716,7 @@
           10,
           14
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -724,7 +724,7 @@
             "description": "Modify the REPL loop to incorporate the dashboard display, ensuring it is shown initially and can be refreshed as needed.",
             "dependencies": [],
             "details": "Update the main-interface function to call display-dashboard before entering the repl-loop, and add mechanisms to refresh the dashboard on command or periodically.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run the interface and verify that the dashboard is displayed at startup and updates correctly during REPL interactions."
           },
           {
@@ -735,7 +735,7 @@
               1
             ],
             "details": "Use threading or asynchronous programming to run dashboard updates in the background while the REPL loop remains responsive to user inputs.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Simulate concurrent operations and check that dashboard updates occur without interrupting REPL commands or causing delays."
           },
           {
@@ -747,7 +747,7 @@
               2
             ],
             "details": "Profile the code for bottlenecks, optimize rendering and input handling, and ensure low-latency interactions in the terminal environment.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Measure response times for commands and updates, ensuring they stay below acceptable thresholds during full session runs."
           }
         ]
@@ -763,7 +763,7 @@
           8,
           14
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -771,7 +771,7 @@
             "description": "Set up the configuration file to define checkpoint points where agents should pause for human review.",
             "dependencies": [],
             "details": "Modify the config.yaml file to include a :checkpoints section with keys like :pre-commit and :at-blockers. Ensure the config loader in core/config.lisp can parse these settings. Implement validation to check for valid checkpoint types.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Load config files with and without checkpoints; verify checkpoint-p function returns correct boolean values."
           },
           {
@@ -782,7 +782,7 @@
               1
             ],
             "details": "In the agent execution loop, add checks using the checkpoint-p function before proceeding to subtasks or when encountering blockers. Use bordeaux-threads to halt execution and signal for human review. Store current state for resumption.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Simulate agent runs with checkpoints enabled; confirm pauses occur at subtasks and blockers without proceeding."
           },
           {
@@ -793,7 +793,7 @@
               2
             ],
             "details": "Create a resume function that restores the agent's state from storage and continues execution from the paused point. Integrate with the pause logic to wait for approval signals, possibly via a queue or event system. Ensure state integrity during pause-resume cycles.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test full pause-resume cycles by approving checkpoints; verify agents continue correctly and complete tasks without data loss."
           }
         ]
@@ -809,7 +809,7 @@
           7,
           8
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -817,7 +817,7 @@
             "description": "Implement the integration with GitHub CLI in integrations/github.lisp to automate PR creation using the provided pseudo-code as a starting point.",
             "dependencies": [],
             "details": "Modify integrations/github.lisp to include the create-pr function that uses run-program to execute 'gh pr create' with formatted arguments based on the tag. Ensure proper error handling for CLI failures and authentication issues.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Mock the GitHub CLI calls and verify that the correct command is executed with the expected arguments."
           },
           {
@@ -828,7 +828,7 @@
               1
             ],
             "details": "Extend the format-args function in integrations/github.lisp to incorporate additional context from the tag or other sources, ensuring PRs are created with meaningful titles, descriptions, and labels. Integrate with existing configuration for API keys and settings.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with sample tags and verify that PRs are created with correct titles, bodies, and labels using mocked GitHub CLI responses."
           }
         ]
@@ -844,7 +844,7 @@
           12,
           18
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -852,7 +852,7 @@
             "description": "Retrieve the diffs from multiple pull requests to prepare for analysis.",
             "dependencies": [],
             "details": "Implement a function to fetch PR diffs from the repository API, handling pagination and error cases for multiple PRs.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use sample PRs to verify diffs are fetched correctly without errors."
           },
           {
@@ -863,7 +863,7 @@
               1
             ],
             "details": "Integrate Claude API call within the review function, formatting diffs appropriately and handling API responses for analysis.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Provide mock diffs and check that API calls return expected analysis outputs."
           },
           {
@@ -874,7 +874,7 @@
               2
             ],
             "details": "Process Claude's response to extract insights, highlight potential issues, and suggest optimal merge order for the PRs.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with sample analyses to ensure insights are accurate and merge suggestions are logical."
           }
         ]
@@ -890,7 +890,7 @@
           13,
           18
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -898,7 +898,7 @@
             "description": "Examine the dependencies between pull requests to build a dependency graph.",
             "dependencies": [],
             "details": "Implement a function to parse PR metadata and construct a graph where nodes are PRs and edges represent dependencies. Use topological sorting principles to ensure no circular dependencies exist.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use mock PR data with known dependencies; verify the graph is built correctly and detects cycles."
           },
           {
@@ -909,7 +909,7 @@
               1
             ],
             "details": "Develop a sorting algorithm that respects dependencies, ensuring dependent PRs are merged after their prerequisites. Integrate with the sort-prs-by-deps function from the pseudo-code.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Provide a set of PRs with dependencies; check that the sorted order allows merges without violating dependencies."
           },
           {
@@ -920,7 +920,7 @@
               2
             ],
             "details": "Automate the execution of 'git merge' for each PR using the sorted list. Handle basic merge success and log outcomes. Incorporate the dolist loop from the pseudo-code.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Simulate a git repository with PR branches; run the merge process and verify branches are merged in the correct sequence."
           },
           {
@@ -931,7 +931,7 @@
               3
             ],
             "details": "Implement conflict detection by checking git merge exit codes. Provide options for manual resolution or automated fixes where possible, ensuring the process pauses for user input on conflicts.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Create scenarios with conflicting changes in PRs; test that conflicts are detected, and resolution leads to successful merges."
           }
         ]
@@ -947,7 +947,7 @@
           10,
           11
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -955,7 +955,7 @@
             "description": "Modify the system to batch status polls and implement caching for analyses to reduce latency and resource usage.",
             "dependencies": [],
             "details": "Update the polling function to batch requests using a loop or queue mechanism. Implement caching for analysis results using a hash table or external cache store. Integrate with the existing pseudo-code: (defun optimized-poll () (with-cached-results (poll-statuses))). Ensure thread-safety if needed.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": null
           },
           {
@@ -966,7 +966,7 @@
               1
             ],
             "details": "Set up benchmarking tools to compare latency and CPU usage before and after changes. Run tests to ensure dashboard refresh is under 2 seconds and CPU usage is below 5%. Use profiling libraries in Common Lisp to gather metrics.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Benchmark before/after; verify dashboard refresh <2s and CPU <5%."
           }
         ]
@@ -982,7 +982,7 @@
           1,
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -990,7 +990,7 @@
             "description": "Develop the auto-save functionality using threading to periodically save session states in the background without blocking the main application.",
             "dependencies": [],
             "details": "Use bordeaux-threads to create a separate thread that runs a loop to save the current session state to a file or database at regular intervals. Ensure thread safety to avoid race conditions. Pseudo-code: (defun auto-save () (bordeaux-threads:make-thread (lambda () (loop (sleep 60) (save-session))))).",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Unit tests for thread creation and session saving; integration tests to verify auto-save runs without interfering with main operations."
           },
           {
@@ -1001,7 +1001,7 @@
               1
             ],
             "details": "Define functions to serialize and deserialize state data using libraries like cl-json or cl-yaml. Store persisted data in a reliable location, such as a file system or database. Ensure data integrity and handle partial saves. Build on the auto-save thread to trigger persistence.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test serialization/deserialization with mock data; verify data persistence across application restarts."
           },
           {
@@ -1012,7 +1012,7 @@
               2
             ],
             "details": "Upon startup, check for persisted session files and load them into memory. Validate the loaded data and handle any corruption gracefully. Integrate with the state persistence to resume from the last saved state. Pseudo-code: (defun recover-session () (when (file-exists-p 'session-file) (load-session (deserialize session-file)))).",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Simulate crashes by killing the process and restarting; verify that sessions are restored correctly and no data is lost."
           },
           {
@@ -1023,7 +1023,7 @@
               3
             ],
             "details": "Track agent states and configurations in the persisted data. Upon recovery, reinitialize and restart agents based on their saved states. Handle dependencies between agents and ensure they resume operations seamlessly. Integrate with session recovery to restart agents as part of the overall recovery process.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test agent restart by simulating agent failures; verify agents resume tasks and maintain state consistency post-restart."
           }
         ]
@@ -1039,7 +1039,7 @@
           14,
           16
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -1047,7 +1047,7 @@
             "description": "Develop a comprehensive help system to assist users in discovering available commands and understanding their usage.",
             "dependencies": [],
             "details": "Create a help function that accepts topics like 'commands' and prints relevant information. Integrate it into the command-line interface for easy access, ensuring it covers all major features with clear examples.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Manual testing by invoking help commands and verifying output accuracy; user feedback on clarity."
           },
           {
@@ -1056,7 +1056,7 @@
             "description": "Improve error messages for better clarity and add features to make commands more discoverable to users.",
             "dependencies": [],
             "details": "Refactor error handling to provide descriptive messages instead of generic ones. Implement command suggestions or auto-completion to aid discoverability, drawing from the help system for consistency.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Simulate error scenarios and check message clarity; conduct usability tests to ensure commands are intuitive."
           }
         ]
@@ -1071,7 +1071,7 @@
         "dependencies": [
           1
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -1079,7 +1079,7 @@
             "description": "Restructure the codebase to follow a modular organization, separating concerns into appropriate files and directories.",
             "dependencies": [],
             "details": "Create directories for core modules, utilities, and tests. Move related functions into dedicated files, ensuring each file has a single responsibility. Update ASDF system definition to reflect the new structure.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that the project loads correctly after reorganization and that all components are accessible."
           },
           {
@@ -1090,7 +1090,7 @@
               1
             ],
             "details": "Go through each function in the codebase and add comments starting with ;; as per the pseudo-code example. Ensure comments are clear, concise, and explain complex logic or assumptions.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Code review to check that comments are present and accurate; run the code to ensure comments do not affect functionality."
           },
           {
@@ -1101,7 +1101,7 @@
               1
             ],
             "details": "Identify tightly coupled code sections and break them into smaller, independent functions. Use proper encapsulation with packages and exports. Ensure modules can be tested and modified independently.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Unit tests to verify that refactored modules work in isolation and integration tests to ensure overall system functionality."
           },
           {
@@ -1113,7 +1113,7 @@
               3
             ],
             "details": "Write a comprehensive README.md explaining the project structure, setup, and usage. Generate API documentation using tools like quickdocs or manual docstrings. Keep docs synchronized with code changes.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Manual review of documentation for completeness and accuracy; verify that new developers can set up and understand the project using the docs."
           },
           {
@@ -1127,7 +1127,7 @@
               4
             ],
             "details": "Review all code files for consistent naming conventions, indentation, and style. Remove dead code, simplify complex expressions, and ensure the code is self-explanatory where possible. Use linters if available.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Peer code review sessions; automated linting checks to ensure style guidelines are met."
           }
         ]
@@ -1143,7 +1143,7 @@
           2,
           9
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -1153,7 +1153,7 @@
               2
             ],
             "details": "Use a robust encryption library in Common Lisp to encrypt API keys before storage. Ensure keys are decrypted only when needed and handle key management securely. Integrate with the configuration loading from Task 2.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Unit tests for encryption/decryption; verify encrypted keys cannot be read without proper decryption."
           },
           {
@@ -1162,7 +1162,7 @@
             "description": "Create a logging system to record all actions and events for audit trails.",
             "dependencies": [],
             "details": "Set up a logging framework in core/audit.lisp to log API calls, key accesses, and agent actions. Use local-time for timestamps and ensure logs are tamper-proof. Store logs securely, possibly encrypted.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Mock actions and verify logs are created accurately; check log integrity and access controls."
           },
           {
@@ -1171,7 +1171,7 @@
             "description": "Sanitize user prompts to redact sensitive information like API keys before processing.",
             "dependencies": [],
             "details": "Implement the sanitize-prompt function as shown in pseudo-code using cl-ppcre. Apply it to all prompts before sending to agents or APIs. Ensure it handles various formats and edge cases for redaction.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test with prompts containing API keys; verify redaction works and sanitized prompts are safe."
           },
           {
@@ -1182,7 +1182,7 @@
               9
             ],
             "details": "Configure a sandbox using available Lisp tools or external mechanisms to restrict agent access to file system, network, etc. Integrate with the ACI from Task 9 to ensure tools run in isolation.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run agents in sandbox and attempt unauthorized operations; verify isolation prevents breaches."
           },
           {
@@ -1196,7 +1196,7 @@
               4
             ],
             "details": "Integrate encryption, logging, sanitization, and sandboxing into the main system. Conduct a full security audit as per the parent task's test strategy, verifying no secrets leak and isolation holds.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "End-to-end security audit; penetration testing to check for vulnerabilities in the integrated system."
           }
         ]
@@ -1380,7 +1380,7 @@
     ],
     "metadata": {
       "created": "2025-10-16T18:35:16.325Z",
-      "updated": "2025-10-17T03:37:53.359Z",
+      "updated": "2025-10-17T04:20:58.015Z",
       "description": "Tasks for master context"
     }
   },
